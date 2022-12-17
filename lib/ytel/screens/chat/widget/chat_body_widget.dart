@@ -18,10 +18,10 @@ class ChatBodyWidget extends StatelessWidget {
           // padding: EdgeInsets.all(10),
           decoration: BoxDecoration(
             color: Colors.white,
-            // borderRadius: BorderRadius.only(
-            //   topLeft: Radius.circular(25),
-            //   topRight: Radius.circular(25),
-            // ),
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(25),
+              topRight: Radius.circular(25),
+            ),
           ),
           child: buildChats(),
         ),
@@ -32,21 +32,39 @@ class ChatBodyWidget extends StatelessWidget {
         itemBuilder: (context, index) {
           final user = users[index];
 
-          return Container(
-            padding: EdgeInsets.only(top: 20),
-            height: 75,
-            child: ListTile(
-              onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => ChatPage(user: user),
-                ));
-              },
-              leading: CircleAvatar(
-                radius: 25,
-                backgroundImage: NetworkImage(user.urlAvatar),
+          return Column(
+            children: [
+              Container(
+                padding: EdgeInsets.only(top: 20),
+                height: 75,
+                child: ListTile(
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => ChatPage(user: user),
+                    ));
+                  },
+                  leading: CircleAvatar(
+                    radius: 25,
+                    backgroundImage: NetworkImage(user.urlAvatar),
+                  ),
+                  title: Text(user.name,
+                      style: TextStyle(
+                        fontSize: 19,
+                        color: Colors.blue,
+                        
+                      )),
+                      
+                      trailing: Icon(Icons.more_vert,color: Colors.black,),
+                ),
               ),
-              title: Text(user.name),
-            ),
+              SizedBox(
+                height: 10,
+              ),
+              Divider(
+                height: 0,
+                thickness: 1,
+              ),
+            ],
           );
         },
         itemCount: users.length,

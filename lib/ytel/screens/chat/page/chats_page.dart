@@ -6,13 +6,22 @@ import '../model/user.dart';
 import '../widget/chat_body_widget.dart';
 import '../widget/chat_header_widget.dart';
 
-class ChatsPage extends StatelessWidget {
+class ChatsPage extends StatefulWidget {
+  @override
+  State<ChatsPage> createState() => _ChatsPageState();
+}
+
+class _ChatsPageState extends State<ChatsPage> {
+  String dropdownValue = "7 days";
+
+  String dropdownValue2 = "Newest";
+
   @override
   Widget build(BuildContext context) => Scaffold(
         backgroundColor: Colors.blue,
         appBar: AppBar(
           backgroundColor: Colors.blue,
-          elevation: 8,
+          
           title: Text(
             'Inbox',
             style: TextStyle(
@@ -41,6 +50,80 @@ class ChatsPage extends StatelessWidget {
                       return Column(
                         children: [
                           // ChatHeaderWidget(users: users),
+                           Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                // crossAxisAlignment: CrossAxisAlignment.center,
+                children:[
+                  DropdownButton<String>(
+                    value: dropdownValue,
+                    dropdownColor: Colors.blue,
+
+                    icon: const Icon(Icons.keyboard_arrow_down,
+                    color: Colors.white),
+                    iconSize: 23,
+                    elevation: 16,
+                    style: const TextStyle(color: Colors.white),
+                    underline: Container(
+                      height: 2,
+                      color: Colors.transparent,
+                    ),
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        dropdownValue = newValue!;
+                      });
+                    },
+                    items: <String>['7 days', '30 days', '90 days']
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value,
+                        style: TextStyle(
+                          fontSize: 19,
+                          color: Colors.white,
+                          
+                        ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+
+
+                  DropdownButton<String>(
+                    // Background color of the dropdown menu
+                    dropdownColor: Colors.blue,
+                    value: dropdownValue2,
+                    icon: const Icon(Icons.keyboard_arrow_down, color: Colors.white),
+                    iconSize: 26,
+                    elevation: 16,
+                    style: const TextStyle(color: Colors.white),
+                    underline: Container(
+                      height: 2,
+                      color: Colors.transparent,
+                    ),
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        dropdownValue2 = newValue!;
+                      });
+                    },
+                    items: <String>['Newest', 'Oldest']
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value,
+                        style: TextStyle(
+                          fontSize: 19,
+                          color: Colors.white,
+                          
+                        ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                   
+                  
+                ]
+              ),
+              SizedBox(height: 10),
                           ChatBodyWidget(users: users)
                         ],
                       );
