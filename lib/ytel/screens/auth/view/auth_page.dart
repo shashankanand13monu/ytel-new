@@ -7,6 +7,7 @@ import 'package:ytel/ytel/helper/widget/custom_widget.dart';
 import 'package:ytel/ytel/screens/auth/controller/auth_controller.dart';
 
 import '../../../utils/extension.dart';
+import '../../../utils/storage_utils.dart';
 
 class AuthPage extends StatefulWidget {
   const AuthPage({Key? key}) : super(key: key);
@@ -211,6 +212,8 @@ class _AuthPageState extends State<AuthPage> {
     onTap: () {
       if(emailConn.text.isNotEmpty && emailConn.text.contains("@") && emailConn.text.contains(".") && passwordConn.text.isNotEmpty && passwordConn.text.length >= 8) {
         signIn();
+        StorageUtil.putString(StringHelper.ACCOUNT_NAME, emailConn.text.trim().split("@")[0]);
+
       } else {
         snackBar(StringHelper.INVALID_DATA, ColorHelper.invalidDataSnackBarColor);
       }

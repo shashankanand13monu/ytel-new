@@ -6,7 +6,7 @@ class StringHelper {
   static const String ACCESS_TOKEN = "accessToken";
   static const String REFRESH_TOKEN = "refreshToken";
   static const String ACCOUNT_ID = "accountId";
-
+  static const String ACCOUNT_NAME= "accountName";
 
   static const String NO_INTERNET = "No internet connection!";
   static const String INVALID_DATA = "Invalid data";
