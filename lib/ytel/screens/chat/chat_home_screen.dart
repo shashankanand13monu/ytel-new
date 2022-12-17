@@ -10,11 +10,7 @@ class ChatHomeScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.blue,
         elevation: 8,
-        leading: IconButton(
-          icon: Icon(Icons.menu),
-          color: Colors.white,
-          onPressed: () {},
-        ),
+        
         title: Text(
           'Inbox',
           style: TextStyle(

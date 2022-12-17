@@ -8,6 +8,7 @@ import 'package:ytel/ytel/helper/constants/colors.dart';
 import 'package:ytel/ytel/helper/constants/icons.dart';
 import 'package:ytel/ytel/helper/constants/strings.dart';
 import 'package:ytel/ytel/screens/Number_Management/view/number_view.dart';
+import 'package:ytel/ytel/screens/Under_Development/under_devlopment.dart';
 import 'package:ytel/ytel/screens/accounts/account_screen.dart';
 import 'package:ytel/ytel/screens/chat/chat_home_screen.dart';
 import 'package:ytel/ytel/screens/contact/view/contact_view.dart';
@@ -15,6 +16,7 @@ import 'package:ytel/ytel/screens/users/view/user_view.dart';
 
 import '../../../helper/widget/rectangle_contaner.dart';
 import '../../../helper/widget/square_container.dart';
+import '../../../utils/storage_utils.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({Key? key}) : super(key: key);
@@ -25,6 +27,7 @@ class DashboardPage extends StatefulWidget {
 
 class _DashboardPageState extends State<DashboardPage> {
   Logger logger = Logger();
+  String userName=  StorageUtil.getString(StringHelper.ACCOUNT_NAME);
 
   void connectSocket() {
     io.Socket socket = io.io('ws://13.232.166.194:8000',
@@ -54,24 +57,35 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   AppBar _appBar() => AppBar(
-    
-        title: const Text("Dashboard"),
-        titleSpacing: 15,
-        automaticallyImplyLeading: false,
-        backgroundColor: const Color.fromARGB(255, 206, 228, 247),
-        actions: [
-          Builder(
-            builder: (context) => InkWell(
-              onTap: () {
+       
+        leading: Builder(
+          builder: (BuildContext context) {
+            return IconButton(
+              icon: const Icon(
+                Icons.menu,
+                color: ColorHelper.primaryTextColor,
+              ),
+              onPressed: () {
                 Scaffold.of(context).openDrawer();
               },
-              child: Padding(
-                padding: const EdgeInsets.only(right: 15, top: 18, bottom: 18),
-                child: Image.asset("assets/images/Vector.png"),
-              ),
-            ),
+            );
+          },
+        ),
+        title: const Text(
+          "Dashboard",
+          style: TextStyle(
+            color: ColorHelper.primaryTextColor,
           ),
-        ],
+        ),
+        
+
+        
+
+
+        
+        automaticallyImplyLeading: false,
+        backgroundColor: const Color.fromARGB(255, 206, 228, 247),
+        
       );
 
   Widget _drawer() => Drawer(
@@ -94,63 +108,64 @@ class _DashboardPageState extends State<DashboardPage> {
                   ),
                 ),
               ),
-              _commonTile("Dashboard", const ContactPage(),
+              _commonTile("Dashboard", const DashboardPage(),
                   "assets/images/monitor.png"),
               _commonTile("Inbox", ChatHomeScreen(), "assets/images/inbox.png"),
               _commonMethod("assets/images/contact.png", "Contacts", [
                 _commonListTile("Contacts", const ContactPage()),
-                _commonListTile("Contact Import Status", const ContactPage()),
-                _commonListTile("Attributes", const ContactPage()),
+                _commonListTile("Contact Import Status", const UnderDevelopment()),
+                _commonListTile("Attributes", const UnderDevelopment()),
               ]),
               _commonMethod("assets/images/project-plan.png", "Workflow", [
-                _commonListTile("Workflows", const ContactPage()),
-                _commonListTile("Message Templates", const ContactPage()),
-                _commonListTile("Webhooks", const ContactPage()),
-                _commonListTile("Enrollment", const ContactPage()),
+                _commonListTile("Workflows", const UnderDevelopment()),
+                _commonListTile("Message Templates", const UnderDevelopment()),
+                _commonListTile("Webhooks", const UnderDevelopment()),
+                _commonListTile("Enrollment", const UnderDevelopment()),
               ]),
               _commonMethod("assets/images/hashtag.png", "Numbers", [
-                _commonListTile("Purchase", const ContactPage()),
+                _commonListTile("Purchase", const UnderDevelopment()),
                 _commonListTile("Manage", const NumberScreen()),
-                _commonListTile("Number Sets", const ContactPage()),
+                _commonListTile("Number Sets", const UnderDevelopment()),
               ]),
               _commonMethod("assets/images/call-center.png", "Reporting", [
-                _commonListTile("Usage", const ContactPage()),
-                _commonListTile("Logs", const ContactPage()),
-                _commonListTile("Routing statistics", const ContactPage()),
-                _commonListTile("Tracking", const ContactPage()),
-                _commonListTile("Workflow", const ContactPage()),
-                _commonListTile("Workflow failures", const ContactPage()),
-                _commonListTile("Workflow paths", const ContactPage()),
+                _commonListTile("Usage", const UnderDevelopment()),
+                _commonListTile("Logs", const UnderDevelopment()),
+                _commonListTile("Routing statistics", const UnderDevelopment()),
+                _commonListTile("Tracking", const UnderDevelopment()),
+                _commonListTile("Workflow", const UnderDevelopment()),
+                _commonListTile("Workflow failures", const UnderDevelopment()),
+                _commonListTile("Workflow paths", const UnderDevelopment()),
               ]),
               _commonMethod("assets/images/settings.png", "Settings", [
-                _commonListTile("Billing", const ContactPage()),
+                _commonListTile("Billing", const UnderDevelopment()),
                 _commonListTile("Accounts", const AccountScreen()),
                 _commonListTile("Users", const UsersPage()),
-                _commonListTile("Buissness Profiles", const ContactPage()),
-                _commonListTile("Assets", const ContactPage()),
-                _commonListTile("API Tokens", const ContactPage()),
-                _commonListTile("Callbacks", const ContactPage()),
-                _commonListTile("CNAM Management", const ContactPage()),
-                _commonListTile("Compliance", const ContactPage()),
-                _commonListTile("Audit", const ContactPage()),
+                _commonListTile("Buissness Profiles", const UnderDevelopment()),
+                _commonListTile("Assets", const UnderDevelopment()),
+                _commonListTile("API Tokens", const UnderDevelopment()),
+                _commonListTile("Callbacks", const UnderDevelopment()),
+                _commonListTile("CNAM Management", const UnderDevelopment()),
+                _commonListTile("Compliance", const UnderDevelopment()),
+                _commonListTile("Audit", const UnderDevelopment()),
               ]),
-              _commonTile("Contact Center", const ContactPage(),
+              _commonTile("Contact Center", const UnderDevelopment(),
                   "assets/images/customer-care.png"),
               _commonTile(
-                  "UCaaS", const ContactPage(), "assets/images/telephone.png"),
+                  "UCaaS", const UnderDevelopment(), "assets/images/telephone.png"),
               _commonTile(
-                  "Add Feature", const ContactPage(), "assets/images/plus.png"),
+                  "Add Feature", const UnderDevelopment(), "assets/images/plus.png"),
               Divider(),
-              _commonMethod("assets/images/user_dp.png", "{User Name}", [
-                _commonListTile("Profile", const ContactPage()),
-                _commonListTile("Logout", const ContactPage()),
+
+              _commonMethod("assets/images/user_dp.png", userName, [
+                _commonListTile("Profile", const UnderDevelopment()),
+                _commonListTile("Logout", const UnderDevelopment()),
               ]),
               _commonMethod("assets/images/information.png", "Help", [
-                _commonListTile("Help Articles", const ContactPage()),
-                _commonListTile("Product Updates", const ContactPage()),
-                _commonListTile("System Status", const ContactPage()),
-                _commonListTile("Training videos", const ContactPage()),
-                _commonListTile("API", const ContactPage()),
+                _commonListTile("Help Articles", const UnderDevelopment()),
+                _commonListTile("Product Updates", const UnderDevelopment()),
+                _commonListTile("System Status", const UnderDevelopment()),
+                _commonListTile("Training videos", const UnderDevelopment()),
+                _commonListTile("API", const UnderDevelopment()),
               ]),
               _drawerSearchBar(),
               Divider(),
@@ -168,10 +183,6 @@ class _DashboardPageState extends State<DashboardPage> {
               const SizedBox(
                 height: 20,
               ),
-              // A search bar rounded with icon
-              _searchBar(context),
-
-              const SizedBox(height: 30),
 
               //ListView Builder with horizontal scroll of square containers from containers.dart
               _squareViewContainer(),
@@ -228,43 +239,6 @@ class _DashboardPageState extends State<DashboardPage> {
         ),
       );
 
-  Widget _searchBar(BuildContext context) => Container(
-        height: 50,
-        width: MediaQuery.of(context).size.width * 0.8,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(30),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 5,
-              blurRadius: 7,
-              offset: const Offset(0, 3), // changes position of shadow
-            ),
-          ],
-        ),
-        child: Row(
-          children: const [
-            SizedBox(
-              width: 10,
-            ),
-            Icon(
-              Icons.search,
-              color: Colors.blue,
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            Text(
-              "Search",
-              style: TextStyle(
-                color: Colors.grey,
-                fontSize: 20,
-              ),
-            ),
-          ],
-        ),
-      );
 
   Widget _squareViewContainer() => SizedBox(
         height: 150,
