@@ -22,5 +22,8 @@ class StringHelper {
     'Ucas',
     'SMS',
     'Cost',
+    'Users',
+    'Create User',
+    'Edit User'
   ];
 }

@@ -26,6 +26,9 @@ dependencies:
   socket_io_client: ^2.0.0
   syncfusion_flutter_charts: ^20.3.52
   url_launcher: ^6.1.6
+  animated_custom_dropdown: ^1.2.2
+  country_picker: ^2.0.18
+  toggle_switch: ^2.0.1
 
 dev_dependencies:
   flutter_lints: ^2.0.0
