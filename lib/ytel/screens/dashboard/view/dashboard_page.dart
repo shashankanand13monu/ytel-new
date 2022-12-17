@@ -10,7 +10,7 @@ import 'package:ytel/ytel/helper/constants/strings.dart';
 import 'package:ytel/ytel/screens/Number_Management/view/number_view.dart';
 import 'package:ytel/ytel/screens/Under_Development/under_devlopment.dart';
 import 'package:ytel/ytel/screens/accounts/account_screen.dart';
-import 'package:ytel/ytel/screens/chat/chat_home_screen.dart';
+import 'package:ytel/ytel/screens/chat/page/chats_page.dart';
 import 'package:ytel/ytel/screens/contact/view/contact_view.dart';
 import 'package:ytel/ytel/screens/users/view/user_view.dart';
 
@@ -110,7 +110,7 @@ class _DashboardPageState extends State<DashboardPage> {
               ),
               _commonTile("Dashboard", const DashboardPage(),
                   "assets/images/monitor.png"),
-              _commonTile("Inbox", ChatHomeScreen(), "assets/images/inbox.png"),
+              _commonTile("Inbox", ChatsPage(), "assets/images/inbox.png"),
               _commonMethod("assets/images/contact.png", "Contacts", [
                 _commonListTile("Contacts", const ContactPage()),
                 _commonListTile("Contact Import Status", const UnderDevelopment()),

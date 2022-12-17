@@ -16,6 +16,10 @@ class ColorHelper {
     Colors.orange,
     Colors.purple,
     Colors.pink,
+    Colors.black,
+    Colors.blueGrey,
+    Colors.white,
+    Colors.grey,
   ];
 
   static const List<Color> colors2 = [
