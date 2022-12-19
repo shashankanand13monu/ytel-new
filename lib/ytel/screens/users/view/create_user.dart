@@ -17,12 +17,13 @@ class create_user extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
-        height: 1500,
+        height: 1700,
         child: Column(
           children: [
             appbar(context),
             Text_Feild("First Name", "string", user_view_controller.first_name_create),
             Text_Feild("Last Name", "string", user_view_controller.last_name_create),
+            Text_Feild("Email", "string", user_view_controller.email_create),
             Row(
               children: [
                 SizedBox(
@@ -223,15 +224,23 @@ Widget Cancel_button(){
 }
 
 Widget save_button(){
-  return Container(
-    height: 60,
-    width: double.infinity,
-    decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(10)),
-        color: ColorHelper.colors[0]
-    ),
-    child: Center(
-      child: Text("Create",style: TextStyle(color: ColorHelper.colors[8],fontSize: 19,letterSpacing: 1),),
+  return InkWell(
+    onTap: (){
+      var validate_res = user_view_controller.validate();
+      if(validate_res == "Validate"){
+        user_view_controller.upload_data();
+      };
+    },
+    child: Container(
+      height: 60,
+      width: double.infinity,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+          color: ColorHelper.colors[0]
+      ),
+      child: Center(
+        child: Text("Create",style: TextStyle(color: ColorHelper.colors[8],fontSize: 19,letterSpacing: 1),),
+      ),
     ),
   );
 }
