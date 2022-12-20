@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "548876363435",
+    "project_id": "ytel-64160",
+    "storage_bucket": "ytel-64160.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:548876363435:android:a3563b284dc449bbfe79ee",
+        "android_client_info": {
+          "package_name": "com.ytel.ytel"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "548876363435-0c648jddobnkllae2837r54jc1pau7m7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAjurrjn8uqtlQDs9VvVH4QMXWztjuBAuA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "548876363435-0c648jddobnkllae2837r54jc1pau7m7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
