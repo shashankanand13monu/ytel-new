@@ -10,7 +10,7 @@ import 'package:ytel/ytel/helper/constants/strings.dart';
 import 'package:ytel/ytel/screens/Number_Management/view/number_view.dart';
 import 'package:ytel/ytel/screens/Under_Development/under_devlopment.dart';
 import 'package:ytel/ytel/screens/accounts/account_screen.dart';
-import 'package:ytel/ytel/screens/chat/chat_home_screen.dart';
+import 'package:ytel/ytel/screens/chat/page/chats_page.dart';
 import 'package:ytel/ytel/screens/contact/view/contact_view.dart';
 import 'package:ytel/ytel/screens/users/view/user_view.dart';
 
@@ -27,7 +27,10 @@ class DashboardPage extends StatefulWidget {
 
 class _DashboardPageState extends State<DashboardPage> {
   Logger logger = Logger();
-  String userName=  StorageUtil.getString(StringHelper.ACCOUNT_NAME);
+  late TooltipBehavior _tooltipBehavior;
+  late TooltipBehavior _sms;
+  late TooltipBehavior _webphone;
+  String userName = StorageUtil.getString(StringHelper.ACCOUNT_NAME);
 
   void connectSocket() {
     io.Socket socket = io.io('ws://13.232.166.194:8000',
@@ -41,52 +44,396 @@ class _DashboardPageState extends State<DashboardPage> {
     socket.onDisconnect((_) => logger.d('disconnect'));
   }
 
+
   @override
   void initState() {
     // connectSocket();
+    _tooltipBehavior = TooltipBehavior(enable: true);
+    _sms = TooltipBehavior(enable: true);
+    _webphone = TooltipBehavior(enable: true);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _appBar(),
+      backgroundColor: ColorHelper.colors[8],
       drawer: _drawer(),
-      body: _body(),
+      body: SingleChildScrollView(
+        child: Container(
+          height: 1200,
+          child: Column(
+            children: [
+              Builder(builder: (context) {
+                return appbar(context);
+              }),
+              body()
+            ],
+          ),
+        ),
+      ),
     );
   }
 
-  AppBar _appBar() => AppBar(
-       
-        leading: Builder(
-          builder: (BuildContext context) {
-            return IconButton(
-              icon: const Icon(
-                Icons.menu,
-                color: ColorHelper.primaryTextColor,
+  Widget appbar(context) {
+    return Column(
+      children: [
+        SafeArea(
+            child: Padding(
+          padding: EdgeInsets.all(18),
+          child: Row(
+            children: [
+              Container(
+                height: 40,
+                width: 40,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(60)),
+                  color: ColorHelper.colors[6].withOpacity(0.2),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(3.0),
+                  child: InkWell(
+                    onTap: () {
+                      print("Open Drawer");
+                      Scaffold.of(context).openDrawer();
+                    },
+                    child: Container(
+                      height: double.infinity,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(60)),
+                          color: ColorHelper.colors[7]),
+                      child: Center(
+                          child: Icon(
+                        IconHelper.icons[13],
+                        color: ColorHelper.colors[8],
+                        size: 15,
+                      )),
+                    ),
+                  ),
+                ),
               ),
-              onPressed: () {
-                Scaffold.of(context).openDrawer();
-              },
-            );
-          },
-        ),
-        title: const Text(
-          "Dashboard",
-          style: TextStyle(
-            color: ColorHelper.primaryTextColor,
+              SizedBox(
+                width: 20,
+              ),
+              Text(
+                "${StringHelper.titles[9]}",
+                style: TextStyle(fontSize: 24),
+              ),
+              Expanded(child: Align(
+                alignment: Alignment.centerRight,
+                child: Container(
+                  height: 40,
+                  width: 40,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(60)),
+                    color: ColorHelper.colors[6].withOpacity(0.2),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(3.0),
+                    child: InkWell(
+                      onLongPress: (){
+
+                      },
+                      onTap: () {
+                        print("Open Drawer");
+                        Scaffold.of(context).openDrawer();
+                      },
+                      child: Container(
+                        height: double.infinity,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(60)),
+                            color: ColorHelper.colors[7]),
+                        child: Center(
+                            child: Icon(
+                              IconHelper.icons[14],
+                              color: ColorHelper.colors[8],
+                              size: 15,
+                            )),
+                      ),
+                    ),
+                  ),
+                ),
+              ))
+            ],
+          ),
+        )),
+      ],
+    );
+  }
+
+  Widget body(){
+    return Column(
+      children: [
+        SizedBox(height: 20,),
+        Container(
+          height: 170,
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                SizedBox(width: 20,),
+                container_rounded("Funds", "NA" , Icon(IconHelper.icons[15],color: ColorHelper.colors[0], size: 44,) , ColorHelper.colors[0] ),
+                SizedBox(width: 20,),
+                container_rounded("Webphone Users", 1000 , Icon(IconHelper.icons[0],color: ColorHelper.colors[7], size: 44,) , ColorHelper.colors[7]),
+                SizedBox(width: 20,),
+                container_rounded("UCaaS seats", 0 , Icon(IconHelper.icons[0],color: ColorHelper.colors[10], size: 44,) , ColorHelper.colors[10]),
+                SizedBox(width: 20,),
+                container_rounded("Numbers", 1722 , Icon(IconHelper.icons[16],color: ColorHelper.colors[4], size: 44,) , ColorHelper.colors[4]),
+                SizedBox(width: 20,),
+              ],
+            ),
           ),
         ),
-        
+        SizedBox(height: 20,),
+        Padding(
+          padding: const EdgeInsets.only(left: 18,right: 18),
+          child: Calls_Chart(),
+        ),
+        SizedBox(height: 20,),
+        Padding(
+          padding: const EdgeInsets.only(left: 18,right: 18),
+          child: SMS(),
+        ),
+        SizedBox(height: 20,),
+        Padding(
+          padding: const EdgeInsets.only(left: 18,right: 18),
+          child: WEBphone(),
+        )
+      ],
+    );
+  }
 
-        
+
+  Widget Calls_Chart(){
+    return Container(
+      height: 270,
+      width: double.infinity,
+      child: Column(
+        children: [
+          Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 2),
+                child: Text("Calls Chart",style: TextStyle(fontSize: 14,color: ColorHelper.colors[9]),),
+              )),
+          Container(
+            height: 250,
+            width: double.infinity,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+                color: ColorHelper.colors[8],
+                boxShadow: [
+                  BoxShadow(
+                      blurRadius: 2.0,
+                      color: ColorHelper.colors[9].withOpacity(0.80)
+                  )
+                ]
+            ),
+            child: SfCartesianChart(
+
+                primaryXAxis: CategoryAxis(),
+                // Chart title
+                // title: ChartTitle(text: 'Half yearly sales analysis'),
+                // Enable legend
+                // legend: Legend(isVisible: true),
+                // Enable tooltip
+                tooltipBehavior: _tooltipBehavior,
+
+                series: <LineSeries<SalesData, String>>[
+                  LineSeries<SalesData, String>(
+                      dataSource:  <SalesData>[
+                        SalesData('Mon', 80),
+                        SalesData('Tue', 60),
+                        SalesData('Wed', 40),
+                        SalesData('Thu', 20),
+                        SalesData('Fri', 0),
+                        SalesData('Sat', 20),
+                        SalesData('Sun', 40)
+                      ],
+                      xValueMapper: (SalesData sales, _) => sales.year,
+                      yValueMapper: (SalesData sales, _) => sales.sales,
+                      // Enable data label
+                      dataLabelSettings: DataLabelSettings(isVisible: true)
+                  )
+                ]
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget SMS(){
+    return Container(
+      height: 270,
+      width: double.infinity,
+      child: Column(
+        children: [
+          Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 2),
+                child: Text("SMS",style: TextStyle(fontSize: 14,color: ColorHelper.colors[9]),),
+              )),
+          Container(
+            height: 250,
+            width: double.infinity,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+                color: ColorHelper.colors[8],
+                boxShadow: [
+                  BoxShadow(
+                      blurRadius: 2.0,
+                      color: ColorHelper.colors[9].withOpacity(0.80)
+                  )
+                ]
+            ),
+            child: SfCartesianChart(
+
+                primaryXAxis: CategoryAxis(),
+                // Chart title
+                // title: ChartTitle(text: 'Half yearly sales analysis'),
+                // Enable legend
+                // legend: Legend(isVisible: true),
+                // Enable tooltip
+                tooltipBehavior: _sms,
+
+                series: <LineSeries<SalesData, String>>[
+                  LineSeries<SalesData, String>(
+                      dataSource:  <SalesData>[
+                        SalesData('Mon', 0),
+                        SalesData('Tue', 0),
+                        SalesData('Wed', 0),
+                        SalesData('Thu', 0),
+                        SalesData('Fri', 0),
+                        SalesData('Sat', 0),
+                        SalesData('Sun', 0)
+                      ],
+                      xValueMapper: (SalesData sales, _) => sales.year,
+                      yValueMapper: (SalesData sales, _) => sales.sales,
+                      // Enable data label
+                      dataLabelSettings: DataLabelSettings(isVisible: true)
+                  )
+                ]
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget WEBphone(){
+    return Container(
+      height: 270,
+      width: double.infinity,
+      child: Column(
+        children: [
+          Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 2),
+                child: Text("Webphone Users",style: TextStyle(fontSize: 14,color: ColorHelper.colors[9]),),
+              )),
+          Container(
+            height: 250,
+            width: double.infinity,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+                color: ColorHelper.colors[8],
+                boxShadow: [
+                  BoxShadow(
+                      blurRadius: 2.0,
+                      color: ColorHelper.colors[9].withOpacity(0.80)
+                  )
+                ]
+            ),
+            child: SfCartesianChart(
+
+                primaryXAxis: CategoryAxis(),
+                // Chart title
+                // title: ChartTitle(text: 'Half yearly sales analysis'),
+                // Enable legend
+                // legend: Legend(isVisible: true),
+                // Enable tooltip
+                tooltipBehavior: _webphone,
+
+                series: <LineSeries<SalesData, String>>[
+                  LineSeries<SalesData, String>(
+                      dataSource:  <SalesData>[
+                        SalesData('Mon', 0),
+                        SalesData('Tue', 0),
+                        SalesData('Wed', 0),
+                        SalesData('Thu', 0),
+                        SalesData('Fri', 0),
+                        SalesData('Sat', 0),
+                        SalesData('Sun', 0)
+                      ],
+                      xValueMapper: (SalesData sales, _) => sales.year,
+                      yValueMapper: (SalesData sales, _) => sales.sales,
+                      // Enable data label
+                      dataLabelSettings: DataLabelSettings(isVisible: true)
+                  )
+                ]
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
 
-        
-        automaticallyImplyLeading: false,
-        backgroundColor: const Color.fromARGB(255, 206, 228, 247),
-        
-      );
+  Widget container_rounded(title , number , icon , base_color ,){
+    return Container(
+      height: 160,
+      width: 130,
+      child: Column(
+        children: [
+          Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 2),
+                child: Text("${title}",style: TextStyle(fontSize: 14,color: ColorHelper.colors[9]),),
+              )),
+        Container(
+        height: 140,
+        width: 130,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            color: ColorHelper.colors[8],
+            boxShadow: [
+              BoxShadow(
+                  blurRadius: 2.0,
+                  color: ColorHelper.colors[9].withOpacity(0.80)
+              )
+            ]
+        ),
+          child: Center(
+            child: Column(
+              children: [
+                SizedBox(height: 30,),
+                Center(child: icon),
+                SizedBox(height: 10,),
+                Text("${number}",style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold,color: base_color),)
+              ],
+            ),
+          ),
+      )
+        ],
+      ),
+    );
+  }
+
+  /////////////////////////////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////// DRAWER /////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////
+  /////////////////////////////////////////
+  //////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////
+                                               //////////////////////////////////////////////////////////
+                                                //////////////////////////////////////////////////////////
 
   Widget _drawer() => Drawer(
         child: SingleChildScrollView(
@@ -110,10 +457,11 @@ class _DashboardPageState extends State<DashboardPage> {
               ),
               _commonTile("Dashboard", const DashboardPage(),
                   "assets/images/monitor.png"),
-              _commonTile("Inbox", ChatHomeScreen(), "assets/images/inbox.png"),
+              _commonTile("Inbox", ChatsPage(), "assets/images/inbox.png"),
               _commonMethod("assets/images/contact.png", "Contacts", [
                 _commonListTile("Contacts", const ContactPage()),
-                _commonListTile("Contact Import Status", const UnderDevelopment()),
+                _commonListTile(
+                    "Contact Import Status", const UnderDevelopment()),
                 _commonListTile("Attributes", const UnderDevelopment()),
               ]),
               _commonMethod("assets/images/project-plan.png", "Workflow", [
@@ -150,12 +498,11 @@ class _DashboardPageState extends State<DashboardPage> {
               ]),
               _commonTile("Contact Center", const UnderDevelopment(),
                   "assets/images/customer-care.png"),
-              _commonTile(
-                  "UCaaS", const UnderDevelopment(), "assets/images/telephone.png"),
-              _commonTile(
-                  "Add Feature", const UnderDevelopment(), "assets/images/plus.png"),
+              _commonTile("UCaaS", const UnderDevelopment(),
+                  "assets/images/telephone.png"),
+              _commonTile("Add Feature", const UnderDevelopment(),
+                  "assets/images/plus.png"),
               Divider(),
-
               _commonMethod("assets/images/user_dp.png", userName, [
                 _commonListTile("Profile", const UnderDevelopment()),
                 _commonListTile("Logout", const UnderDevelopment()),
@@ -171,308 +518,6 @@ class _DashboardPageState extends State<DashboardPage> {
               Divider(),
             ],
           ),
-        ),
-      );
-
-  Widget _body() => Container(
-        color: const Color.fromARGB(255, 206, 228, 247),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const SizedBox(
-                height: 20,
-              ),
-
-              //ListView Builder with horizontal scroll of square containers from containers.dart
-              _squareViewContainer(),
-
-              _rectangleViewContainer(),
-
-              const SizedBox(height: 10),
-              // syncfusion_flutter_charts stacked line graph
-              _stack_chart(),
-
-              const SizedBox(height: 30),
-
-              // Bar Graph
-              _bar_graph(),
-
-              const SizedBox(height: 30),
-              // Pie Chart of "cost distribution"
-              _pie_chart_cost_distribution(),
-
-              const SizedBox(height: 30),
-            ],
-          ),
-        ),
-      );
-
-  Widget _drawerSearchBar() => Padding(
-        padding: const EdgeInsets.only(left: 15, right: 15, top: 15),
-        child: Container(
-          height: 40,
-          decoration: BoxDecoration(
-            color: const Color.fromARGB(255, 206, 228, 247),
-            borderRadius: BorderRadius.circular(5),
-          ),
-          child: Row(
-            children: const [
-              Padding(
-                padding: EdgeInsets.only(left: 10),
-                child: Icon(
-                  Icons.search,
-                  color: ColorHelper.primaryTextColor,
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: 10),
-                child: Text(
-                  "Search",
-                  style: TextStyle(
-                    color: ColorHelper.primaryTextColor,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
-
-
-  Widget _squareViewContainer() => SizedBox(
-        height: 150,
-        child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: 6,
-          itemBuilder: (context, index) {
-            return Container(
-              margin: const EdgeInsets.only(left: 10),
-              child: Column(
-                children: [
-                  SquareContainer(
-                    color: ColorHelper.colors[index],
-                    icon: IconHelper.icons[index],
-                    text: StringHelper.titles[index],
-                    value: (index * 10).toString(),
-                  ),
-                ],
-              ),
-            );
-          },
-        ),
-      );
-
-  Widget _rectangleViewContainer() => SizedBox(
-        height: 220,
-        child: ListView.builder(
-          scrollDirection: Axis.vertical,
-          itemCount: 3,
-          itemBuilder: (context, index) {
-            return Container(
-              margin: const EdgeInsets.only(left: 10, right: 10),
-              child: Column(
-                children: [
-                  RectangleContainer(
-                    color: ColorHelper.colors2[index],
-                    iconColor: ColorHelper.colors[index],
-                    icon: IconHelper.icons[index],
-                    title: StringHelper.titles[index],
-                    value: (index * 10 + 45).toString(),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                ],
-              ),
-            );
-          },
-        ),
-      );
-
-  Widget _stack_chart() => Container(
-        height: 300,
-        margin: const EdgeInsets.only(left: 10, right: 10),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(10),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 5,
-              blurRadius: 7,
-              offset: const Offset(0, 3), // changes position of shadow
-            ),
-          ],
-        ),
-        child: SfCartesianChart(
-          enableAxisAnimation: true,
-          primaryXAxis: CategoryAxis(
-            //name x-axis
-            title: AxisTitle(text: 'Months'),
-            //name y-axis
-          ),
-          primaryYAxis: NumericAxis(
-            title: AxisTitle(text: 'Total Calls'),
-          ),
-          // Chart title
-          title: ChartTitle(text: 'Call inbound and outbound'),
-          // Enable legend
-          legend: Legend(isVisible: false),
-          //Name x-axis
-
-          // Enable tooltip
-          tooltipBehavior: TooltipBehavior(enable: true),
-          series: <ChartSeries<SalesData, String>>[
-            LineSeries<SalesData, String>(
-                dataSource: <SalesData>[
-                  SalesData('Jan', 35),
-                  SalesData('Feb', 28),
-                  SalesData('Mar', 34),
-                  SalesData('Apr', 32),
-                  SalesData('May', 40)
-                ],
-                xValueMapper: (SalesData sales, _) => sales.year,
-                yValueMapper: (SalesData sales, _) => sales.sales,
-                name: 'John',
-                markerSettings: const MarkerSettings(isVisible: true),
-                // Enable data label
-                dataLabelSettings: const DataLabelSettings(
-                  isVisible: false,
-                )),
-            LineSeries<SalesData, String>(
-                dataSource: <SalesData>[
-                  SalesData('Jan', 45),
-                  SalesData('Feb', 48),
-                  SalesData('Mar', 44),
-                  SalesData('Apr', 42),
-                  SalesData('May', 50)
-                ],
-                xValueMapper: (SalesData sales, _) => sales.year,
-                yValueMapper: (SalesData sales, _) => sales.sales,
-                name: 'Steve',
-                markerSettings: const MarkerSettings(isVisible: true),
-                // Enable data label
-                dataLabelSettings: const DataLabelSettings(isVisible: false)),
-            LineSeries<SalesData, String>(
-                dataSource: <SalesData>[
-                  SalesData('Jan', 55),
-                  SalesData('Feb', 58),
-                  SalesData('Mar', 54),
-                  SalesData('Apr', 52),
-                  SalesData('May', 60)
-                ],
-                xValueMapper: (SalesData sales, _) => sales.year,
-                yValueMapper: (SalesData sales, _) => sales.sales,
-                name: 'Jack',
-                markerSettings: const MarkerSettings(isVisible: true),
-                // Enable data label
-                dataLabelSettings: const DataLabelSettings(isVisible: false))
-          ],
-        ),
-      );
-
-  Widget _bar_graph() => Container(
-        height: 300,
-        margin: const EdgeInsets.only(left: 10, right: 10),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(10),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 5,
-              blurRadius: 7,
-              offset: const Offset(0, 3), // changes position of shadow
-            ),
-          ],
-        ),
-        child: SfCartesianChart(
-          primaryXAxis: CategoryAxis(),
-          // Chart title
-          title: ChartTitle(text: 'Call inbound and outbound'),
-          // Enable legend
-          legend: Legend(isVisible: false),
-          // Enable tooltip
-          tooltipBehavior: TooltipBehavior(enable: true),
-          series: <ChartSeries<SalesData, String>>[
-            ColumnSeries<SalesData, String>(
-                dataSource: <SalesData>[
-                  SalesData('Jan', 35),
-                  SalesData('Feb', 28),
-                  SalesData('Mar', 34),
-                  SalesData('Apr', 32),
-                  SalesData('May', 40)
-                ],
-                xValueMapper: (SalesData sales, _) => sales.year,
-                yValueMapper: (SalesData sales, _) => sales.sales,
-                name: 'John',
-                markerSettings: const MarkerSettings(isVisible: true),
-                // Enable data label
-                dataLabelSettings: const DataLabelSettings(isVisible: false)),
-            ColumnSeries<SalesData, String>(
-                dataSource: <SalesData>[
-                  SalesData('Jan', 45),
-                  SalesData('Feb', 48),
-                  SalesData('Mar', 44),
-                  SalesData('Apr', 42),
-                  SalesData('May', 50)
-                ],
-                xValueMapper: (SalesData sales, _) => sales.year,
-                yValueMapper: (SalesData sales, _) => sales.sales,
-                name: 'Steve',
-                markerSettings: const MarkerSettings(isVisible: true),
-                // Enable data label
-                dataLabelSettings: const DataLabelSettings(isVisible: false)),
-            ColumnSeries<SalesData, String>(
-                dataSource: <SalesData>[
-                  SalesData('Jan', 55),
-                  SalesData('Feb', 58),
-                  SalesData('Mar', 54),
-                  SalesData('Apr', 52),
-                  SalesData('May', 60)
-                ],
-                xValueMapper: (SalesData sales, _) => sales.year,
-                yValueMapper: (SalesData sales, _) => sales.sales,
-                name: 'Jack',
-                markerSettings: const MarkerSettings(isVisible: true),
-                // Enable data label
-                dataLabelSettings: const DataLabelSettings(isVisible: false))
-          ],
-        ),
-      );
-
-  Widget _pie_chart_cost_distribution() => Container(
-        height: 300,
-        margin: const EdgeInsets.only(left: 10, right: 10),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(10),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 5,
-              blurRadius: 7,
-              offset: const Offset(0, 3), // changes position of shadow
-            ),
-          ],
-        ),
-        child: SfCircularChart(
-          title: ChartTitle(text: 'Call cost distribution'),
-          legend: Legend(isVisible: true),
-          series: <CircularSeries>[
-            DoughnutSeries<SalesData, String>(
-                dataSource: <SalesData>[
-                  SalesData('Jan', 35),
-                  SalesData('Feb', 28),
-                  SalesData('Mar', 34),
-                  SalesData('Apr', 32),
-                  SalesData('May', 40)
-                ],
-                xValueMapper: (SalesData data, _) => data.year,
-                yValueMapper: (SalesData data, _) => data.sales,
-                dataLabelSettings: const DataLabelSettings(isVisible: true))
-          ],
         ),
       );
 
@@ -530,6 +575,39 @@ class _DashboardPageState extends State<DashboardPage> {
 
 class SalesData {
   SalesData(this.year, this.sales);
+
   final String year;
   final double sales;
 }
+
+
+Widget _drawerSearchBar() => Padding(
+  padding: const EdgeInsets.only(left: 15, right: 15, top: 15),
+  child: Container(
+    height: 40,
+    decoration: BoxDecoration(
+      color: const Color.fromARGB(255, 206, 228, 247),
+      borderRadius: BorderRadius.circular(5),
+    ),
+    child: Row(
+      children: const [
+        Padding(
+          padding: EdgeInsets.only(left: 10),
+          child: Icon(
+            Icons.search,
+            color: ColorHelper.primaryTextColor,
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.only(left: 10),
+          child: Text(
+            "Search",
+            style: TextStyle(
+              color: ColorHelper.primaryTextColor,
+            ),
+          ),
+        ),
+      ],
+    ),
+  ),
+);
