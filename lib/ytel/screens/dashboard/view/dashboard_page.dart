@@ -61,7 +61,7 @@ class _DashboardPageState extends State<DashboardPage> {
       drawer: _drawer(),
       body: SingleChildScrollView(
         child: Container(
-          height: 1200,
+          height: 1210,
           child: Column(
             children: [
               Builder(builder: (context) {
@@ -208,14 +208,14 @@ class _DashboardPageState extends State<DashboardPage> {
 
   Widget Calls_Chart(){
     return Container(
-      height: 270,
+      height: 280,
       width: double.infinity,
       child: Column(
         children: [
           Align(
               alignment: Alignment.centerLeft,
               child: Padding(
-                padding: const EdgeInsets.only(left: 2),
+                padding: const EdgeInsets.only(left: 2,bottom: 4),
                 child: Text("Calls Chart",style: TextStyle(fontSize: 14,color: ColorHelper.colors[9]),),
               )),
           Container(
@@ -267,15 +267,15 @@ class _DashboardPageState extends State<DashboardPage> {
 
   Widget SMS(){
     return Container(
-      height: 270,
+      height: 280,
       width: double.infinity,
       child: Column(
         children: [
           Align(
               alignment: Alignment.centerLeft,
               child: Padding(
-                padding: const EdgeInsets.only(left: 2),
-                child: Text("SMS",style: TextStyle(fontSize: 14,color: ColorHelper.colors[9]),),
+                padding: const EdgeInsets.only(left: 2,bottom: 4),
+                child: Text("SMS",style: TextStyle(fontSize: 14,color: ColorHelper.colors[9] ),),
               )),
           Container(
             height: 250,
@@ -326,14 +326,14 @@ class _DashboardPageState extends State<DashboardPage> {
 
   Widget WEBphone(){
     return Container(
-      height: 270,
+      height: 280,
       width: double.infinity,
       child: Column(
         children: [
           Align(
               alignment: Alignment.centerLeft,
               child: Padding(
-                padding: const EdgeInsets.only(left: 2),
+                padding: const EdgeInsets.only(left: 2,bottom: 4),
                 child: Text("Webphone Users",style: TextStyle(fontSize: 14,color: ColorHelper.colors[9]),),
               )),
           Container(
@@ -386,19 +386,19 @@ class _DashboardPageState extends State<DashboardPage> {
 
   Widget container_rounded(title , number , icon , base_color ,){
     return Container(
-      height: 160,
-      width: 130,
+      height: 150,
+      width: 110,
       child: Column(
         children: [
           Align(
               alignment: Alignment.centerLeft,
               child: Padding(
-                padding: const EdgeInsets.only(left: 2),
-                child: Text("${title}",style: TextStyle(fontSize: 14,color: ColorHelper.colors[9]),),
+                padding: const EdgeInsets.only(left: 2 , bottom: 4),
+                child: Text("${title}",style: TextStyle(fontSize: 14,color: ColorHelper.colors[9] , overflow: TextOverflow.ellipsis),),
               )),
         Container(
-        height: 140,
-        width: 130,
+        height: 120,
+        width: 110,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(10)),
             color: ColorHelper.colors[8],
@@ -412,7 +412,7 @@ class _DashboardPageState extends State<DashboardPage> {
           child: Center(
             child: Column(
               children: [
-                SizedBox(height: 30,),
+                SizedBox(height: 20,),
                 Center(child: icon),
                 SizedBox(height: 10,),
                 Text("${number}",style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold,color: base_color),)
@@ -446,13 +446,16 @@ class _DashboardPageState extends State<DashboardPage> {
                 child: SizedBox(
                   height: 200,
                   width: MediaQuery.of(context).size.width,
-                  child: const Text(
-                    "Ytel",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 30,
-                    ),
-                  ),
+                  child: Column(
+                    children: [
+                      Center(
+                        child: Icon(IconHelper.icons[10],size: 94,color: ColorHelper.colors[8],)
+                      ),
+                      Center(
+                        child: Text(userName,style: TextStyle(color: ColorHelper.colors[8],fontSize: 24),),
+                      )
+                    ],
+                  )
                 ),
               ),
               _commonTile("Dashboard", const DashboardPage(),
@@ -486,7 +489,7 @@ class _DashboardPageState extends State<DashboardPage> {
               ]),
               _commonMethod("assets/images/settings.png", "Settings", [
                 _commonListTile("Billing", const UnderDevelopment()),
-                _commonListTile("Accounts", const AccountScreen()),
+                _commonListTile("Accounts", const AccountPage()),
                 _commonListTile("Users", const UsersPage()),
                 _commonListTile("Buissness Profiles", const UnderDevelopment()),
                 _commonListTile("Assets", const UnderDevelopment()),
