@@ -43,25 +43,25 @@ Widget appbar(context){
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(3.0),
-                    child: Container(
-                      height: double.infinity,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(60)),
-                          color: ColorHelper.colors[7]),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 5),
-                        child: Center(
-                            child: InkWell(
-                              onTap: (){
-
-                              },
+                    child: InkWell(
+                      onTap: (){
+                        Navigator.pop(context);
+                      },
+                      child: Container(
+                        height: double.infinity,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(60)),
+                            color: ColorHelper.colors[7]),
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 5),
+                          child: Center(
                               child: Icon(
                                 IconHelper.icons[6],
                                 color: ColorHelper.colors[8],
                                 size: 15,
-                              ),
-                            )),
+                              )),
+                        ),
                       ),
                     ),
                   ),

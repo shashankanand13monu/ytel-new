@@ -20,6 +20,7 @@ class ColorHelper {
     Colors.blueGrey,
     Colors.white,
     Colors.grey,
+    Colors.amber
   ];
 
   static const List<Color> colors2 = [
