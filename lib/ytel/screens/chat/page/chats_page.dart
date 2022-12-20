@@ -1,6 +1,11 @@
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:ytel/ytel/screens/auth/controller/chat_view_controller.dart';
+import 'package:ytel/ytel/screens/chat/page/my_chats.dart';
 
+import '../../../helper/constants/colors.dart';
+import '../../../helper/constants/icons.dart';
 import '../api/firebase_api.dart';
 import '../model/user.dart';
 import '../widget/chat_body_widget.dart';
@@ -13,6 +18,8 @@ class ChatsPage extends StatefulWidget {
 
 class _ChatsPageState extends State<ChatsPage> {
   String dropdownValue = "7 days";
+  AsyncSnapshot<dynamic> snap =
+      AsyncSnapshot.withData(ConnectionState.none, null);
 
   String dropdownValue2 = "Newest";
 
@@ -124,7 +131,8 @@ class _ChatsPageState extends State<ChatsPage> {
                 ]
               ),
               SizedBox(height: 10),
-                          ChatBodyWidget(users: users)
+                          // ChatBodyWidget(users: users),
+                          body(),
                         ],
                       );
                   }
@@ -140,4 +148,142 @@ class _ChatsPageState extends State<ChatsPage> {
           style: TextStyle(fontSize: 24, color: Colors.white),
         ),
       );
+
+  Widget body(){
+  return Expanded(child: Center(
+    child: FutureBuilder(
+      future: chat_view_controller.data(),
+      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot){
+        if(snapshot.connectionState == ConnectionState.waiting){
+          return Center(
+            child: CircularProgressIndicator(color: ColorHelper.colors[6],strokeWidth: 1,),
+          );
+        }else if(snapshot.hasError){
+          return Center(
+            child: CircularProgressIndicator(color: ColorHelper.colors[6],strokeWidth: 1,),
+          );
+        }else{
+          snap = snapshot;
+          return Container(
+            decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(25),
+              topRight: Radius.circular(25),
+            ),
+          ),
+            child: Column(
+              children: [
+                Expanded(
+                  child: ListView.builder(
+                      itemCount : snapshot.data!["payload"].length,
+                      itemBuilder: (context , int index){
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            height: 50,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.all(Radius.circular(10)),
+                                // border: Border.all(),
+
+                            ),
+                            child: GestureDetector(
+                              onTap: (){
+                               //Go to My_Chat page with getx method
+                               
+                                Get.to(MyChats(contactId: snapshot.data!["payload"][index.toInt()]["contact"]["contactId"].toString(),contactName: snapshot.data!["payload"][index.toInt()]["contact"]["extData"]["firstname"].toString(),index: index,snapshot: snap,),transition: Transition.rightToLeftWithFade);
+                              },
+                              child: Row(
+                                children: [
+                                  SizedBox(width: 5,),
+                                  Icon(IconHelper.icons[10],color: ColorHelper.colors[7],
+                                  size: 30,),
+                                  SizedBox(width: 15,),
+                                  Text(snapshot.data!["payload"][index.toInt()]["contact"]["extData"]["firstname"].toString(),style: TextStyle(
+                                    fontSize: 20,
+                                    color: ColorHelper.colors[0],
+                                  ),),
+                                  Expanded(child: Align(
+                                    alignment: Alignment.centerRight,
+                                    child: InkWell(
+                                        onTap: (){
+                                         // show more options for the chat like "Delete Chat","Block User","Archive Chat"
+                                          showModalBottomSheet(
+                                            
+                                              context: context,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(25),
+                                                  topRight: Radius.circular(25),
+                                                ),
+                                              ),
+                                              backgroundColor: ColorHelper.colors[0],
+                                              builder: (BuildContext context){
+                                                
+                                                return Container(
+                                                  height: 200,
+                                                  child: Column(
+                                                    children: [
+                                                      ListTile(
+                                                        leading: Icon(IconHelper.icons[11],color: ColorHelper.colors[8],),
+                                                        title: Text("Delete Chat",style: TextStyle(
+                                                          fontSize: 20,
+                                                          color: ColorHelper.colors[8],
+                                                        ),),
+                                                        onTap: (){
+                                                          //Delete Chat
+                                                          
+                                                          Get.back();
+                                                        },
+                                                      ),
+                                                      ListTile(
+                                                        leading: Icon(IconHelper.icons[12],color: ColorHelper.colors[8],),
+                                                        title: Text("Block User",style: TextStyle(
+                                                          fontSize: 20,
+                                                          color: ColorHelper.colors[8],
+                                                        ),),
+                                                        onTap: (){
+                                                          //Block User
+                                                          
+                                                        },
+                                                      ),
+                                                      ListTile(
+                                                        leading: Icon(IconHelper.icons[14],color: ColorHelper.colors[8],),
+                                                        title: Text("Archive Chat",style: TextStyle(
+                                                          fontSize: 20,
+                                                          color: ColorHelper.colors[8],
+                                                        ),),
+                                                        onTap: (){
+                                                          //Archive Chat
+                                                          
+                                                        },
+                                                      ),
+                                                    ],
+                                                  ),
+                                                );
+                                              }
+                                          );
+
+
+                                         
+                                        },
+                                        child: Icon(IconHelper.icons[13],color: ColorHelper.colors[6],)),
+                                  )),
+                                  
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      }),
+                )
+              ],
+            ),
+          );
+        }
+      },
+    ),
+  ));
+}
 }

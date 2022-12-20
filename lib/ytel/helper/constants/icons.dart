@@ -18,6 +18,8 @@ class IconHelper {
     Icons.download_rounded,
     Icons.account_circle,
     Icons.edit,
-    Icons.delete
+    Icons.delete,
+    Icons.more_vert,
+    Icons.archive,
   ];
 }
