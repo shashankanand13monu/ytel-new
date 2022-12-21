@@ -25,6 +25,10 @@ class StringHelper {
     'Users',
     'Create User',
     'Edit User',
+    'Dashboard',
+    'Accounts',
+    'Create Account'
     'Edit Info'
+
   ];
 }

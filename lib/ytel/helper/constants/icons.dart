@@ -19,7 +19,12 @@ class IconHelper {
     Icons.account_circle,
     Icons.edit,
     Icons.delete,
+    Icons.menu_outlined,
+    Icons.copy,
+    Icons.monetization_on,
+    Icons.numbers
     Icons.more_vert,
     Icons.archive,
+
   ];
 }

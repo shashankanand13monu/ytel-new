@@ -2,16 +2,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:ytel/ytel/screens/auth/controller/user_view_controller.dart';
 
-import '../../../helper/constants/colors.dart';
-import '../../../helper/constants/icons.dart';
-import '../../../helper/constants/strings.dart';
-import 'elements/check_box.dart';
-import 'elements/country_code_picker.dart';
+import '../../helper/constants/colors.dart';
+import '../../helper/constants/icons.dart';
+import '../../helper/constants/strings.dart';
+import '../auth/controller/user_view_controller.dart';
+import '../users/view/elements/check_box.dart';
+import '../users/view/elements/country_code_picker.dart';
 
-class create_user extends StatelessWidget {
-  const create_user({Key? key}) : super(key: key);
+class create_Account extends StatelessWidget {
+  const create_Account({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -147,7 +147,7 @@ Widget appbar(context){
                   width: 20,
                 ),
                 Text(
-                  "${StringHelper.titles[7]}",
+                  "${StringHelper.titles[11]}",
                   style: TextStyle(fontSize: 24),
                 ),
 
