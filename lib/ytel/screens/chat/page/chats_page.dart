@@ -37,7 +37,52 @@ class _ChatsPageState extends State<ChatsPage> {
           ),
           
         ),
-        body: SafeArea(
+        // 2 Tabs for "Open" and "Closed" chats
+        body: DefaultTabController(
+          length: 2,
+          child: Column(
+            children: [
+              Container(
+                constraints: BoxConstraints(maxHeight: 150.0),
+                child: Material(
+                  color: Colors.blue,
+                  child: TabBar(
+                    indicatorColor: Colors.white,
+                    tabs: [
+                      Tab(
+                        text: "Open",
+                      ),
+                      Tab(
+                        text: "Closed",
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Expanded(
+                child: TabBarView(
+                  children: [
+                    open(),
+                    closed(),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+
+      );
+
+  Widget buildText(String text) => Center(
+        child: Text(
+          text,
+          style: TextStyle(fontSize: 24, color: Colors.white),
+        ),
+      );
+
+  Widget open()
+  {
+    return SafeArea(
           child: StreamBuilder<List<User>>(
             stream: FirebaseApi.getUsers(),
             builder: (context, snapshot) {
@@ -139,15 +184,8 @@ class _ChatsPageState extends State<ChatsPage> {
               }
             },
           ),
-        ),
-      );
-
-  Widget buildText(String text) => Center(
-        child: Text(
-          text,
-          style: TextStyle(fontSize: 24, color: Colors.white),
-        ),
-      );
+        );  
+  }
 
   Widget body(){
   return Expanded(child: Center(
@@ -286,4 +324,16 @@ class _ChatsPageState extends State<ChatsPage> {
     ),
   ));
 }
+
+  Widget closed()
+  {
+    return Container(
+      child: Center(
+        child: Text("No Chats",style: TextStyle(
+          fontSize: 20,
+          color: Colors.white,
+        ),),
+      ),
+    );
+  }
 }

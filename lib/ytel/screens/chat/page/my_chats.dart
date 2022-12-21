@@ -35,6 +35,11 @@ class _MyChatsState extends State<MyChats> {
 
   _MyChatsState(this.contactId, this.contactName, this.index,this.snapshot);
   @override
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -128,13 +133,7 @@ class _MyChatsState extends State<MyChats> {
                         reverse: true,
                         itemCount: snapshot.data["payload"].length,
                         itemBuilder: (context, int index) {
-                          if (snapshot.data["payload"][index.toInt()]["event"]
-                                      ["body"]
-                                  .toString() ==
-                              "null")
-                            return SizedBox(
-                              width: 0,
-                            );
+                         
                           return Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Container(
@@ -146,12 +145,11 @@ class _MyChatsState extends State<MyChats> {
                                 // border: Border.all(),
                               ),
                               child: MyChatWidget(
-                                  message: snapshot.data["payload"]
-                                          [index.toInt()]["event"]["body"]
-                                      .toString(),
+                                  snapshot: snapshot,
                                   isMe: snapshot.data["payload"][index.toInt()]
                                           ["event"]["direction"]
-                                      .toString()),
+                                      .toString(),index: index,),
+                                      
                             ),
                           );
                         }),
