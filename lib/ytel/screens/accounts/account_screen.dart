@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:ytel/ytel/helper/constants/colors.dart';
 import 'package:ytel/ytel/helper/constants/icons.dart';
 import 'package:ytel/ytel/helper/constants/strings.dart';
+import 'package:ytel/ytel/screens/accounts/create%20account.dart';
 import 'package:ytel/ytel/screens/auth/controller/user_view_controller.dart';
 import 'package:ytel/ytel/screens/users/view/edit%20user.dart';
 
@@ -99,7 +100,7 @@ Widget appbar(context){
                               child: Center(
                                   child: InkWell(
                                     onTap: (){
-                                      // Get.to(create_user());
+                                      Get.to(create_Account());
                                     },
                                     child: Icon(
                                       IconHelper.icons[7],

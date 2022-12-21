@@ -26,6 +26,7 @@ class StringHelper {
     'Create User',
     'Edit User',
     'Dashboard',
-    'Accounts'
+    'Accounts',
+    'Create Account'
   ];
 }
