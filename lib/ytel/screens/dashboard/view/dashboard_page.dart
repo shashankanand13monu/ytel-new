@@ -12,6 +12,7 @@ import 'package:ytel/ytel/screens/Under_Development/under_devlopment.dart';
 import 'package:ytel/ytel/screens/accounts/account_screen.dart';
 import 'package:ytel/ytel/screens/chat/page/chats_page.dart';
 import 'package:ytel/ytel/screens/contact/view/contact_view.dart';
+import 'package:ytel/ytel/screens/dashboard/view/logout.dart';
 import 'package:ytel/ytel/screens/users/view/user_view.dart';
 
 import '../../../helper/widget/rectangle_contaner.dart';
@@ -508,7 +509,7 @@ class _DashboardPageState extends State<DashboardPage> {
               Divider(),
               _commonMethod("assets/images/user_dp.png", userName, [
                 _commonListTile("Profile", const UnderDevelopment()),
-                _commonListTile("Logout", const UnderDevelopment()),
+                _commonListTile("Logout", LogoutDialog()),
               ]),
               _commonMethod("assets/images/information.png", "Help", [
                 _commonListTile("Help Articles", const UnderDevelopment()),

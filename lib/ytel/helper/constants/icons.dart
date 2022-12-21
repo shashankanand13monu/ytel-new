@@ -23,5 +23,8 @@ class IconHelper {
     Icons.copy,
     Icons.monetization_on,
     Icons.numbers
+    Icons.more_vert,
+    Icons.archive,
+
   ];
 }

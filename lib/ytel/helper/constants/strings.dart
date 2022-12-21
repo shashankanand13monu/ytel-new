@@ -10,7 +10,7 @@ class StringHelper {
 
   static const String NO_INTERNET = "No internet connection!";
   static const String INVALID_DATA = "Invalid data";
-
+  
 
   // Images
 
@@ -28,5 +28,7 @@ class StringHelper {
     'Dashboard',
     'Accounts',
     'Create Account'
+    'Edit Info'
+
   ];
 }

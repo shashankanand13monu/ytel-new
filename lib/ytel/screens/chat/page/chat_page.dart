@@ -19,14 +19,21 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
+    
   @override
   Widget build(BuildContext context) => Scaffold(
         extendBodyBehindAppBar: true,
         backgroundColor: Colors.blue,
         body: SafeArea(
+          
           child: Column(
+            
             children: [
               ProfileHeaderWidget(name: widget.user.name),
+              SizedBox(height: 1),
+          
+             
+
               Expanded(
                 child: Container(
                   padding: EdgeInsets.all(10),
@@ -45,4 +52,5 @@ class _ChatPageState extends State<ChatPage> {
           ),
         ),
       );
+      
 }

@@ -41,12 +41,15 @@ class _NewMessageWidgetState extends State<NewMessageWidget> {
                 enableSuggestions: true,
                 decoration: InputDecoration(
                   filled: true,
-                  fillColor: Colors.grey[100],
+                  fillColor: Color.fromARGB(255, 221, 230, 239),
                   labelText: 'Message',
+                  //width
+                  contentPadding: EdgeInsets.symmetric(horizontal: 15),
                   border: OutlineInputBorder(
+
                     borderSide: BorderSide(width: 0),
                     gapPadding: 10,
-                    borderRadius: BorderRadius.circular(15),
+                    borderRadius: BorderRadius.circular(29),
                   ),
                 ),
                 onChanged: (value) => setState(() {

@@ -35,11 +35,13 @@ class ProfileHeaderWidget extends StatelessWidget {
                     buildIcon(Icons.call),
                     SizedBox(width: 12),
                     buildIcon(Icons.videocam),
+                    SizedBox(width: 12),
+                    buildIcon(Icons.more_vert),
                   ],
                 ),
                 SizedBox(width: 4),
               ],
-            )
+            ),
           ],
         ),
       );
@@ -48,7 +50,6 @@ class ProfileHeaderWidget extends StatelessWidget {
         padding: EdgeInsets.all(5),
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: Colors.white54,
         ),
         child: Icon(icon, size: 25, color: Colors.white),
       );
