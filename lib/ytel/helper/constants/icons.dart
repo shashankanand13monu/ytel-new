@@ -22,7 +22,7 @@ class IconHelper {
     Icons.menu_outlined,
     Icons.copy,
     Icons.monetization_on,
-    Icons.numbers
+    Icons.numbers,
     Icons.more_vert,
     Icons.archive,
 
