@@ -306,7 +306,7 @@ class _ChatsPageState extends State<ChatsPage> {
 
                                          
                                         },
-                                        child: Icon(IconHelper.icons[13],color: ColorHelper.colors[6],)),
+                                        child: Icon(IconHelper.icons[17],color: ColorHelper.colors[6],)),
                                   )),
                                   
                                 ],
