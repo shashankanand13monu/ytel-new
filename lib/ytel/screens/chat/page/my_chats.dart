@@ -31,6 +31,9 @@ class _MyChatsState extends State<MyChats> {
   int index;
   AsyncSnapshot<dynamic> snapshot;
   bool isLoading = true;
+  AsyncSnapshot<dynamic> chatSnapshot=AsyncSnapshot<dynamic>.nothing();
+
+  
   
 
   _MyChatsState(this.contactId, this.contactName, this.index,this.snapshot);
@@ -41,6 +44,7 @@ class _MyChatsState extends State<MyChats> {
     super.dispose();
   }
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue,
@@ -84,6 +88,8 @@ class _MyChatsState extends State<MyChats> {
         ),
       ),
     );
+
+    
   }
 
   Widget buildText(String text) => Center(
@@ -114,7 +120,7 @@ class _MyChatsState extends State<MyChats> {
               ),
             );
           } else {
-            
+            chatSnapshot = snapshot;
             return Container(
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -155,7 +161,11 @@ class _MyChatsState extends State<MyChats> {
                         }),
                   ),
                   NewMessageWidget(
-                    idUser: contactName,
+                    contactId: contactId,
+                    accountId: chatSnapshot.data["payload"][0]["accountSid"],
+                    from: chatSnapshot.data["payload"][0]["event"]["from"],
+                    to: chatSnapshot.data["payload"][0]["event"]["to"],
+
                   ),
                 ],
               ),

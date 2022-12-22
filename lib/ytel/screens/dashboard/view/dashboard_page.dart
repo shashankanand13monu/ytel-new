@@ -12,6 +12,7 @@ import 'package:ytel/ytel/screens/Under_Development/under_devlopment.dart';
 import 'package:ytel/ytel/screens/accounts/account_screen.dart';
 import 'package:ytel/ytel/screens/chat/page/chats_page.dart';
 import 'package:ytel/ytel/screens/contact/view/contact_view.dart';
+import 'package:ytel/ytel/screens/dashboard/view/homescreen.dart';
 import 'package:ytel/ytel/screens/dashboard/view/logout.dart';
 import 'package:ytel/ytel/screens/users/view/user_view.dart';
 
@@ -459,7 +460,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   )
                 ),
               ),
-              _commonTile("Dashboard", const DashboardPage(),
+              _commonTile("Dashboard", const HomeScreen(),
                   "assets/images/monitor.png"),
               _commonTile("Inbox", ChatsPage(), "assets/images/inbox.png"),
               _commonMethod("assets/images/contact.png", "Contacts", [

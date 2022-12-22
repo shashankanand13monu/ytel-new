@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ytel/ytel/screens/dashboard/view/dashboard_page.dart';
+import 'package:ytel/ytel/screens/dashboard/view/homescreen.dart';
 
 import '../../../helper/constants/strings.dart';
 import '../../../utils/storage_utils.dart';
@@ -28,7 +29,7 @@ class _SplashScreenState extends State<SplashScreen> {
     bool isLogin = StorageUtil.getBool(StringHelper.IS_LOGIN);
 
     if (isLogin) {
-      Get.offAll(() => const DashboardPage());
+      Get.offAll(() => const HomeScreen());
     } else {
       Get.offAll(() => const AuthPage());
     }

@@ -4,6 +4,7 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:logger/logger.dart';
 import 'package:ytel/ytel/helper/constants/strings.dart';
 import 'package:ytel/ytel/screens/dashboard/view/dashboard_page.dart';
+import 'package:ytel/ytel/screens/dashboard/view/homescreen.dart';
 import 'package:ytel/ytel/services/api_services.dart';
 import 'package:ytel/ytel/utils/extension.dart';
 import 'package:ytel/ytel/utils/storage_utils.dart';
@@ -27,7 +28,7 @@ class AuthController extends GetxController {
         logger.d("Decode Token: $decodedToken");
         getAllPrivileges();
         getAccountConfig(decodedToken["acct"]);
-        Get.offAll(() => const DashboardPage());
+        Get.offAll(() => const HomeScreen());
       } else if(response.statusCode == 403) {
         snackBar(response.data["message"], Colors.blue);
       } else {

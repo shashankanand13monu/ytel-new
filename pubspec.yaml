@@ -27,6 +27,7 @@ dependencies:
   http: ^0.13.5
   jwt_decoder: ^2.0.1
   logger: ^1.1.0
+  persistent_bottom_nav_bar: ^5.0.2
   pretty_dio_logger: ^1.1.1
   shared_preferences: ^2.0.15
   socket_io_client: ^2.0.0
