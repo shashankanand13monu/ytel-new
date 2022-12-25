@@ -25,6 +25,7 @@ class IconHelper {
     Icons.numbers,
     Icons.more_vert,
     Icons.archive,
+    Icons.info_outline,
 
   ];
 }

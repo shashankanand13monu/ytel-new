@@ -16,8 +16,6 @@ import '../api/firebase_api.dart';
 import '../model/user.dart';
 import 'package:http/http.dart' as http;
 
-import '../widget/chat_header_widget.dart';
-
 class ChatsPage extends StatefulWidget {
   @override
   State<ChatsPage> createState() => _ChatsPageState();

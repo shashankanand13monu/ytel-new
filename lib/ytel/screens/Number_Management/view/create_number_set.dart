@@ -9,17 +9,20 @@ import 'package:ytel/ytel/services/interceptors.dart';
 import '../../../helper/constants/strings.dart';
 import '../../../utils/storage_utils.dart';
 
-class EditPhoneNumber extends StatefulWidget {
-  String phoneId;
 
-  EditPhoneNumber({Key? key, required this.phoneId}) : super(key: key);
+
+
+class CreateNumberSet extends StatefulWidget {
+  String numberSetId;
+
+  CreateNumberSet({Key? key, required this.numberSetId}) : super(key: key);
 
   @override
-  State<EditPhoneNumber> createState() => _EditPhoneNumberState(phoneId);
+  State<CreateNumberSet> createState() => _CreateNumberSetState(numberSetId);
 }
 
-class _EditPhoneNumberState extends State<EditPhoneNumber> {
-  String phoneId;
+class _CreateNumberSetState extends State<CreateNumberSet> {
+  String numberSetId;
   List<String> method1 = ['POST', 'GET'];
   List<String> method2 = ['POST', 'GET'];
   List<String> method3 = ['POST', 'GET'];
@@ -43,34 +46,34 @@ class _EditPhoneNumberState extends State<EditPhoneNumber> {
   final TextEditingController sms_request_URL = TextEditingController();
   final TextEditingController sms_fallback_URL = TextEditingController();
   final TextEditingController friendly_name = TextEditingController();
-  var apiList;
   bool _isLoading = false;
 
   @override
   void initState() {
     super.initState();
-    getNumbersFromAPI();
   }
 
   String accessToken = StorageUtil.getString(StringHelper.ACCESS_TOKEN);
 
-  _EditPhoneNumberState(this.phoneId);
+  _CreateNumberSetState(this.numberSetId);
   @override
   Widget build(BuildContext context) {
+  
     //Display 3 screen defaultTabController
     Color color = ColorHelper.colors[9];
     return DefaultTabController(
-      length: 3,
+      length: 2,
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: ColorHelper.primaryTextColor,
           title:
-              Text("Edit  " + phoneId, style: TextStyle(color: Colors.white)),
+              Text("Create Number Set" ,style: 
+              TextStyle(color: Colors.white),),
           bottom: TabBar(
             tabs: [
               Tab(text: "Inbound Voice"),
               Tab(text: "Inbound SMS"),
-              Tab(text: "Webphone"),
+              
             ],
           ),
         ),
@@ -87,7 +90,7 @@ class _EditPhoneNumberState extends State<EditPhoneNumber> {
                   //--------------------------------------------------------------------
                   _inboundSms(),
                   //--------------------------------------------------------------------
-                  _inboundWebphone()
+                  
                 ],
               ),
       ),
@@ -110,7 +113,7 @@ class _EditPhoneNumberState extends State<EditPhoneNumber> {
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Text("Friendly Name",
+                Text("Name",
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
@@ -124,7 +127,6 @@ class _EditPhoneNumberState extends State<EditPhoneNumber> {
             TextFormField(
               controller: friendly_name,
               decoration: InputDecoration(
-                hintText: apiList['payload'][0]['friendlyName'],
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(24.0),
                 ),
@@ -153,7 +155,6 @@ class _EditPhoneNumberState extends State<EditPhoneNumber> {
             TextFormField(
               controller: voice_request_URL,
               decoration: InputDecoration(
-                hintText: apiList['payload'][0]['voiceUrl'],
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(24),
                 ),
@@ -195,7 +196,6 @@ class _EditPhoneNumberState extends State<EditPhoneNumber> {
             TextFormField(
               controller: voice_fallback_URL,
               decoration: InputDecoration(
-                hintText: apiList['payload'][0]['voiceFallbackUrl'],
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(24),
                 ),
@@ -237,7 +237,6 @@ class _EditPhoneNumberState extends State<EditPhoneNumber> {
             TextFormField(
               controller: hangup_callback_URL,
               decoration: InputDecoration(
-                hintText: apiList['payload'][0]['hangupCallbackUrl'],
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(24),
                 ),
@@ -278,7 +277,6 @@ class _EditPhoneNumberState extends State<EditPhoneNumber> {
             TextFormField(
               controller: heartbeat_URL,
               decoration: InputDecoration(
-                labelText: apiList['payload'][0]['heartbeatUrl'],
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(24),
                 ),
@@ -303,7 +301,7 @@ class _EditPhoneNumberState extends State<EditPhoneNumber> {
             SizedBox(
               height: 20,
             ),
-            //Display a button named "Save"
+            //Display a button named "Create"
           ],
         ),
       ),
@@ -334,7 +332,6 @@ class _EditPhoneNumberState extends State<EditPhoneNumber> {
           TextFormField(
             controller: sms_request_URL,
             decoration: InputDecoration(
-              hintText: apiList['payload'][0]['smsUrl'],
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(24),
               ),
@@ -375,7 +372,6 @@ class _EditPhoneNumberState extends State<EditPhoneNumber> {
           TextFormField(
             controller: sms_fallback_URL,
             decoration: InputDecoration(
-              hintText: apiList['payload'][0]['smsFallbackUrl'],
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(24),
               ),
@@ -405,49 +401,7 @@ class _EditPhoneNumberState extends State<EditPhoneNumber> {
     ));
   }
 
-  Widget _inboundWebphone() {
-    return Center(
-        child: Column(
-      children: [
-        //Dropdown button for Yes or No qith title "Enable Call Recording"
-        Padding(
-          padding: const EdgeInsets.all(25.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                "Enable Call Recording",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              DropdownButtonHideUnderline(
-                child: DropdownButton(
-                  value: rec,
-                  items: record_method.map((String value) {
-                    return DropdownMenuItem(
-                      value: record_method.indexOf(value),
-                      child: Text(value),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      rec = value as int;
-                    });
-                  },
-                ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              _webphoneSave(),
-            ],
-          ),
-        ),
-      ],
-    ));
-  }
+ 
 
   Widget _inboxSave() {
     return Row(
@@ -494,7 +448,7 @@ class _EditPhoneNumberState extends State<EditPhoneNumber> {
                   friendly_name.text);
             },
             child: Text(
-              'Save',
+              'Create',
               style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -551,7 +505,7 @@ class _EditPhoneNumberState extends State<EditPhoneNumber> {
               putSMSApi(sms_fallback_URL.text, sms_request_URL.text);
             },
             child: Text(
-              'Save',
+              'Create',
               style: TextStyle(
                   fontSize: 23,
                   fontWeight: FontWeight.bold,
@@ -567,7 +521,7 @@ class _EditPhoneNumberState extends State<EditPhoneNumber> {
     );
   }
 
-  Widget _webphoneSave() {
+  Widget _webphoneCreateNumberSet() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
@@ -608,7 +562,7 @@ class _EditPhoneNumberState extends State<EditPhoneNumber> {
               print(heartbeat_URL.text);
             },
             child: Text(
-              'Save',
+              'Create',
               style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -629,24 +583,32 @@ class _EditPhoneNumberState extends State<EditPhoneNumber> {
     String voice_fallback_URL,
     String hangup_callback_URL,
     String heartbeat_URL,
-    String friendly_name,
-  ) async {
-    String url = "https://api.ytel.com/api/v4/number/$phoneId/";
+    String friendly_name,) 
+    async {
+    String url = "https://api.ytel.com/api/v4/numberset/";
 
     Map<String, String> body = {
-      'voiceUrl': voice_request_URL,
-      'voiceFallbackUrl': voice_fallback_URL,
-      'hangupCallbackUrl': hangup_callback_URL,
-      "hangupCallbackMethod": "POST",
-      'heartbeatUrl': heartbeat_URL,
-      "heartbeatMethod": "GET",
-      "voiceFallbackMethod": "POST",
-      "voiceMethod": "POST",
-      'friendlyName': friendly_name,
+     "forwardNumber":"",
+     "callerIdName":"",
+     "name":friendly_name,
+     "numberSetId":"",
+     "voiceUrl":voice_request_URL,
+     "voiceMethod":"POST",
+     "voiceFallbackUrl":voice_fallback_URL,
+     "voiceFallbackMethod":"POST",
+     "hangupCallbackUrl":hangup_callback_URL,
+     "hangupCallbackMethod":"POST",
+     "heartbeatUrl":heartbeat_URL,
+     "heartbeatMethod":"POST",
+     "smsUrl":"","smsMethod":"POST",
+     "smsFallbackUrl":"",
+     "smsFallbackMethod":"POST",
+     "cnam":""
+    
     };
 
     try {
-      http.Response response = await http.put(
+      http.Response response = await http.post(
         Uri.parse(url),
         headers: {
           'Accept': 'application/json',
@@ -657,10 +619,6 @@ class _EditPhoneNumberState extends State<EditPhoneNumber> {
       );
 
       var data = jsonDecode(response.body);
-
-      /*
-      {"status":false,"count":0,"page":0,"error":[{"code":"404","message":"Number not found","moreInfo":null}]}
-     */
 
       if (response.statusCode == 200) {
         if (data['status'] == false) {
@@ -680,9 +638,8 @@ class _EditPhoneNumberState extends State<EditPhoneNumber> {
     }
   }
 
-  Future<void> putSMSApi(
-      String sms_fallback_URL, String sms_request_URL) async {
-    String url = "https://api.ytel.com/api/v4/shortcode/$phoneId/";
+  Future<void> putSMSApi( String sms_fallback_URL, String sms_request_URL) async {
+    String url = "https://api.ytel.com/api/v4/numberset/";
 
     Map<String, String> body = {
       "smsMethod": "GET",
@@ -692,7 +649,7 @@ class _EditPhoneNumberState extends State<EditPhoneNumber> {
     };
 
     try {
-      http.Response response = await http.put(
+      http.Response response = await http.post(
         Uri.parse(url),
         headers: {
           'Accept': 'application/json',
@@ -726,44 +683,5 @@ class _EditPhoneNumberState extends State<EditPhoneNumber> {
     }
   }
 
-  Future<void> getNumbersFromAPI() async {
-    _isLoading = true;
-    String url = 'https://api.ytel.com/api/v4/number/$phoneId/';
-
-    try {
-      var result = await http.get(
-          Uri.parse(
-            url,
-          ),
-          headers: {
-            'Accept': 'application/json',
-            'Authorization': 'Bearer $accessToken',
-          });
-
-      if (result.statusCode == 200) {
-        var data = json.decode(result.body);
-
-        // print(data);
-
-        if (data['status'] == false) {
-          // print(data);
-
-          /*{status: false, count: 0, page: 0, error: [{code: 401, message: Permission denied, moreInfo: null}]} */
-
-          //Display Dialog Box of error message with "Logout" button
-
-          //go to catch throw error
-          throw Exception(data['error'][0]['message']);
-        }
-
-        setState(() {
-          apiList = data;
-          _isLoading = false;
-        });
-      }
-    } catch (e) {
-      //Display Dialog Box of error message with "Logout" button
-      logger.e(e.toString());
-    }
-  }
+  
 }

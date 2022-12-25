@@ -7,7 +7,10 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:ytel/ytel/helper/constants/colors.dart';
 import 'package:ytel/ytel/helper/constants/icons.dart';
 import 'package:ytel/ytel/helper/constants/strings.dart';
+import 'package:ytel/ytel/screens/Number_Management/number_management.dart';
+import 'package:ytel/ytel/screens/Number_Management/view/number_set.dart';
 import 'package:ytel/ytel/screens/Number_Management/view/number_view.dart';
+import 'package:ytel/ytel/screens/Number_Management/view/purchase_number.dart';
 import 'package:ytel/ytel/screens/Under_Development/under_devlopment.dart';
 import 'package:ytel/ytel/screens/accounts/account_screen.dart';
 import 'package:ytel/ytel/screens/chat/page/chats_page.dart';
@@ -476,9 +479,9 @@ class _DashboardPageState extends State<DashboardPage> {
                 _commonListTile("Enrollment", const UnderDevelopment()),
               ]),
               _commonMethod("assets/images/hashtag.png", "Numbers", [
-                _commonListTile("Purchase", const UnderDevelopment()),
-                _commonListTile("Manage", const NumberScreen()),
-                _commonListTile("Number Sets", const UnderDevelopment()),
+                _commonListTile("Purchase", const PurchaseNumber()),
+                _commonListTile("Manage", const NumberManagement()),
+                _commonListTile("Number Sets", const NumberSet()),
               ]),
               _commonMethod("assets/images/call-center.png", "Reporting", [
                 _commonListTile("Usage", const UnderDevelopment()),
