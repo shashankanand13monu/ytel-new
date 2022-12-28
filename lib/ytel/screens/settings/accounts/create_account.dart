@@ -1,37 +1,36 @@
 import 'dart:convert';
+import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:ytel/ytel/helper/constants/colors.dart';
+import 'package:ytel/ytel/helper/widget/common_snackbar.dart';
 import 'package:ytel/ytel/services/interceptors.dart';
 
 import '../../../helper/constants/strings.dart';
-import '../../../helper/widget/common_snackbar.dart';
 import '../../../utils/storage_utils.dart';
 
-class PurchaseSpecificNumber extends StatefulWidget {
-  PurchaseSpecificNumber({Key? key}) : super(key: key);
+class CreateAccount extends StatefulWidget {
+  CreateAccount({
+    Key? key,
+  }) : super(key: key);
 
   @override
-  State<PurchaseSpecificNumber> createState() => _PurchaseSpecificNumberState();
+  State<CreateAccount> createState() => _CreateAccountState();
 }
 
-class _PurchaseSpecificNumberState extends State<PurchaseSpecificNumber> {
-  final TextEditingController phoneNo = TextEditingController();
-  final TextEditingController numset= TextEditingController();
-  final TextEditingController cnam = TextEditingController();
+class _CreateAccountState extends State<CreateAccount> {
+  final TextEditingController name = TextEditingController();
+  final TextEditingController website = TextEditingController();
+  final TextEditingController phone_no = TextEditingController();
 
-  
-
-  @override
-  void initState() {
-    super.initState();
-  }
+  var apiList;
+  bool _isLoading = false;
 
   String accessToken = StorageUtil.getString(StringHelper.ACCESS_TOKEN);
 
-  _PurchaseSpecificNumberState();
+  _CreateAccountState();
   @override
   Widget build(BuildContext context) {
     //Display 3 screen defaultTabController
@@ -39,24 +38,26 @@ class _PurchaseSpecificNumberState extends State<PurchaseSpecificNumber> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: ColorHelper.primaryTextColor,
-        title: Text("Purchase Specific Number",
-            style: TextStyle(color: Colors.white)),
-        
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            _inboundVoice(),
-          ],
+        title: Text(
+          "Create Account",
+          style: TextStyle(color: Colors.white),
         ),
       ),
+      body: _isLoading == true
+          ? Center(
+              child: CircularProgressIndicator(
+                color: ColorHelper.colors[6],
+                strokeWidth: 1,
+              ),
+            )
+          : _userEdit(),
     );
   }
 
-  Widget _inboundVoice() {
+  Widget _userEdit() {
     return Center(
         child: Padding(
-      padding: const EdgeInsets.all(25.0),
+      padding: const EdgeInsets.all(10.0),
       child: SingleChildScrollView(
         child: Column(
           children: [
@@ -69,7 +70,7 @@ class _PurchaseSpecificNumberState extends State<PurchaseSpecificNumber> {
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Text("Phone Number",
+                Text("Name",
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
@@ -81,7 +82,7 @@ class _PurchaseSpecificNumberState extends State<PurchaseSpecificNumber> {
             ),
 
             TextFormField(
-              controller: phoneNo,
+              controller: name,
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(24.0),
@@ -95,7 +96,7 @@ class _PurchaseSpecificNumberState extends State<PurchaseSpecificNumber> {
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Text("Number Set",
+                Text("Website",
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
@@ -106,24 +107,22 @@ class _PurchaseSpecificNumberState extends State<PurchaseSpecificNumber> {
               height: 10,
             ),
 
-            //Display a form with 4 textfield named "Voice request URL","Voice Fallback URL","Hangup callback URL","heartbeat URL" with a side drop down button which has "POST" and "GET" as options and default value as "POST" with DropdownButtonHideUnderline
-
             TextFormField(
-              controller: numset,
+              controller: website,
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(24),
                 ),
-                
               ),
             ),
+
             SizedBox(
               height: 15,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Text("CNAM",
+                Text("Phone No",
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
@@ -135,30 +134,28 @@ class _PurchaseSpecificNumberState extends State<PurchaseSpecificNumber> {
             ),
 
             TextFormField(
-              controller: cnam,
+              controller: phone_no,
+              obscureText: true,
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(24),
                 ),
-               
               ),
             ),
+
             SizedBox(
               height: 15,
             ),
-            
-            
-            
+
+            SizedBox(
+              height: 20,
+            ),
             //Display a button named "Save"
           ],
         ),
       ),
     ));
   }
-
-  
-
- 
 
   Widget _inboxSave() {
     return Row(
@@ -198,14 +195,13 @@ class _PurchaseSpecificNumberState extends State<PurchaseSpecificNumber> {
             onPressed: () {
               //Put API to edit fields
               putApi(
-                phoneNo.text,
-                numset.text,
-                cnam.text,
-                
+                name.text,
+                website.text,
+                phone_no.text,
               );
             },
             child: Text(
-              'Buy',
+              'Save',
               style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -221,17 +217,22 @@ class _PurchaseSpecificNumberState extends State<PurchaseSpecificNumber> {
     );
   }
 
- 
-  
-
   Future<void> putApi(
-    String phoneNo,
-    String numSet,
-    String cnam,
+    String name,
+    String website,
+    String phone,
   ) async {
-    String url = "https://api.ytel.com/api/v4/number/purchase/";
+    String url = "https://api.ytel.com/ams/v2/accounts";
 
-    Map<String, dynamic> body = {"phoneNumber":[phoneNo],"numberSetId":numSet,"cnam":cnam};
+    Map<String, dynamic> body = {
+      "domain": website,
+      "name": name,
+      "phone": phone_no.text,
+      "isParentAcct": false,
+      "source": "interact",
+      "status": 1,
+      "id": null
+    };
 
     try {
       http.Response response = await http.post(
@@ -245,21 +246,17 @@ class _PurchaseSpecificNumberState extends State<PurchaseSpecificNumber> {
       );
 
       var data = jsonDecode(response.body);
-
-      /*
-      {"status":false,"count":0,"page":0,"error":[{"code":"404","message":"Number not found","moreInfo":null}]}
-     */
-
+      print(data);
       if (response.statusCode == 200) {
-        if (data['status'] == false) {
-          CommonSnackBar.showSnackbar("Error", data['error'][0]['message']);
-
+        if (data['status'] != "active") {
           
-          throw Exception(data['error'][0]['message']);
+
+          CommonSnackBar.showSnackbar("Error", data['message']);
+          throw Exception(data['message']);
+        } else {
+          CommonSnackBar.showSnackbar("Sucess", "Account Created successfully");
         }
         //Show success message
-       
-        CommonSnackBar.showSnackbar("Sucess", "Number Purchased successfully");
 
       }
     } catch (e) {

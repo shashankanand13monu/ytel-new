@@ -7,8 +7,8 @@ import '../../helper/constants/colors.dart';
 import '../../helper/constants/icons.dart';
 import '../../helper/constants/strings.dart';
 import '../auth/controller/user_view_controller.dart';
-import '../users/view/elements/check_box.dart';
-import '../users/view/elements/country_code_picker.dart';
+import '../settings/view/elements/check_box.dart';
+import '../settings/view/elements/country_code_picker.dart';
 
 class create_Account extends StatelessWidget {
   const create_Account({Key? key}) : super(key: key);

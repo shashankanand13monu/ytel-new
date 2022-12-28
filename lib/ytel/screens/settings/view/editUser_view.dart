@@ -10,53 +10,70 @@ import '../../../helper/constants/strings.dart';
 import '../../../helper/widget/common_snackbar.dart';
 import '../../../utils/storage_utils.dart';
 
-class PurchaseSpecificNumber extends StatefulWidget {
-  PurchaseSpecificNumber({Key? key}) : super(key: key);
 
-  @override
-  State<PurchaseSpecificNumber> createState() => _PurchaseSpecificNumberState();
-}
 
-class _PurchaseSpecificNumberState extends State<PurchaseSpecificNumber> {
-  final TextEditingController phoneNo = TextEditingController();
-  final TextEditingController numset= TextEditingController();
-  final TextEditingController cnam = TextEditingController();
-
+class EditUserDetails extends StatefulWidget {
+  dynamic snapshot;
   
 
+  EditUserDetails({Key? key, required this.snapshot}) : super(key: key);
+
   @override
-  void initState() {
-    super.initState();
-  }
+  State<EditUserDetails> createState() => _EditUserDetailsState(snapshot);
+}
+
+class _EditUserDetailsState extends State<EditUserDetails> {
+  dynamic snapshot;
+ 
+
+
+  final TextEditingController first_name = TextEditingController();
+  final TextEditingController last_name = TextEditingController();
+  final TextEditingController email = TextEditingController();
+  final TextEditingController phone_no = TextEditingController();
+  
+  var apiList;
+  bool _isLoading = false;
+
+ 
 
   String accessToken = StorageUtil.getString(StringHelper.ACCESS_TOKEN);
 
-  _PurchaseSpecificNumberState();
+  _EditUserDetailsState(this.snapshot);
   @override
   Widget build(BuildContext context) {
+    first_name.text = snapshot['firstName']==null?"":snapshot['firstName'];
+    last_name.text = snapshot['lastName']==null?"":snapshot['lastName'];
+    email.text = snapshot['username']==null?"":snapshot['username'];
+    phone_no.text = snapshot['phone']==null?"":snapshot['phone'];
+
+  
     //Display 3 screen defaultTabController
     Color color = ColorHelper.colors[9];
     return Scaffold(
       appBar: AppBar(
         backgroundColor: ColorHelper.primaryTextColor,
-        title: Text("Purchase Specific Number",
-            style: TextStyle(color: Colors.white)),
-        
+        title:
+            Text("Edit User" ,style: 
+            TextStyle(color: Colors.white),),
+       
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            _inboundVoice(),
-          ],
-        ),
-      ),
+      body: _isLoading == true
+          ? Center(
+              child: CircularProgressIndicator(
+                color: ColorHelper.colors[6],
+                strokeWidth: 1,
+              ),
+            ):
+                _userEdit(),
+          
     );
   }
 
-  Widget _inboundVoice() {
+  Widget _userEdit() {
     return Center(
         child: Padding(
-      padding: const EdgeInsets.all(25.0),
+      padding: const EdgeInsets.all(10.0),
       child: SingleChildScrollView(
         child: Column(
           children: [
@@ -66,6 +83,88 @@ class _PurchaseSpecificNumberState extends State<PurchaseSpecificNumber> {
               height: 20,
             ),
 
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text("First Name",
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                    )),
+              ],
+            ),
+            SizedBox(
+              height: 10,
+            ),
+
+            TextFormField(
+              controller: first_name,
+              
+              decoration: InputDecoration(
+                hintText: snapshot['firstName'],
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(24.0),
+                ),
+                //border color
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text("Last Name",
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                    )),
+              ],
+            ),
+            SizedBox(
+              height: 10,
+            ),
+
+            //Display a form with 4 textfield named "Voice request URL","Voice Fallback URL","Hangup callback URL","heartbeat URL" with a side drop down button which has "POST" and "GET" as options and default value as "POST" with DropdownButtonHideUnderline
+
+            TextFormField(
+              controller: last_name,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(24),
+                ),
+                
+              ),
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text("Email",
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                    )),
+              ],
+            ),
+            SizedBox(
+              height: 10,
+            ),
+
+            TextFormField(
+              controller: email,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(24),
+                ),
+                
+              ),
+            ),
+            SizedBox(
+              height: 15,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -81,35 +180,7 @@ class _PurchaseSpecificNumberState extends State<PurchaseSpecificNumber> {
             ),
 
             TextFormField(
-              controller: phoneNo,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(24.0),
-                ),
-                //border color
-              ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text("Number Set",
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                    )),
-              ],
-            ),
-            SizedBox(
-              height: 10,
-            ),
-
-            //Display a form with 4 textfield named "Voice request URL","Voice Fallback URL","Hangup callback URL","heartbeat URL" with a side drop down button which has "POST" and "GET" as options and default value as "POST" with DropdownButtonHideUnderline
-
-            TextFormField(
-              controller: numset,
+              controller: phone_no,
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(24),
@@ -120,35 +191,11 @@ class _PurchaseSpecificNumberState extends State<PurchaseSpecificNumber> {
             SizedBox(
               height: 15,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text("CNAM",
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                    )),
-              ],
-            ),
+            
+            
             SizedBox(
-              height: 10,
+              height: 20,
             ),
-
-            TextFormField(
-              controller: cnam,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(24),
-                ),
-               
-              ),
-            ),
-            SizedBox(
-              height: 15,
-            ),
-            
-            
-            
             //Display a button named "Save"
           ],
         ),
@@ -156,7 +203,7 @@ class _PurchaseSpecificNumberState extends State<PurchaseSpecificNumber> {
     ));
   }
 
-  
+
 
  
 
@@ -198,14 +245,14 @@ class _PurchaseSpecificNumberState extends State<PurchaseSpecificNumber> {
             onPressed: () {
               //Put API to edit fields
               putApi(
-                phoneNo.text,
-                numset.text,
-                cnam.text,
-                
-              );
+                  first_name.text,
+                  last_name.text,
+                  email.text,
+                  phone_no.text,
+                  );
             },
             child: Text(
-              'Buy',
+              'Save',
               style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -221,20 +268,26 @@ class _PurchaseSpecificNumberState extends State<PurchaseSpecificNumber> {
     );
   }
 
- 
   
 
-  Future<void> putApi(
-    String phoneNo,
-    String numSet,
-    String cnam,
-  ) async {
-    String url = "https://api.ytel.com/api/v4/number/purchase/";
+  Future<void> putApi(String first_name, String last_name, String email,
+      String phone_no) 
+    async {
+    String url = "https://api.ytel.com/ams/v2/users";
 
-    Map<String, dynamic> body = {"phoneNumber":[phoneNo],"numberSetId":numSet,"cnam":cnam};
+    Map<String, dynamic> body = {
+
+  "firstName":first_name,
+  "lastName":last_name,
+  "phone":phone_no,
+  "roles":["contact-admin","gi-agent","number-admin","workflow-admin","settings-admin","billing-admin","basic-reports","asset-admin"],
+  "status":"active",
+  "username":email,
+    
+    };
 
     try {
-      http.Response response = await http.post(
+      http.Response response = await http.put(
         Uri.parse(url),
         headers: {
           'Accept': 'application/json',
@@ -246,24 +299,25 @@ class _PurchaseSpecificNumberState extends State<PurchaseSpecificNumber> {
 
       var data = jsonDecode(response.body);
 
-      /*
-      {"status":false,"count":0,"page":0,"error":[{"code":"404","message":"Number not found","moreInfo":null}]}
-     */
-
       if (response.statusCode == 200) {
-        if (data['status'] == false) {
-          CommonSnackBar.showSnackbar("Error", data['error'][0]['message']);
-
+        if (data['status'] !="active") {
           
+
+        CommonSnackBar.showSnackbar("Error", data['message']);
+
           throw Exception(data['error'][0]['message']);
         }
         //Show success message
        
-        CommonSnackBar.showSnackbar("Sucess", "Number Purchased successfully");
+        CommonSnackBar.showSnackbar("Sucess", "User updated successfully");
 
       }
     } catch (e) {
       logger.e(e);
     }
   }
+
+  
+
+  
 }

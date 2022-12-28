@@ -4,59 +4,67 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:ytel/ytel/helper/constants/colors.dart';
+import 'package:ytel/ytel/helper/widget/common_snackbar.dart';
 import 'package:ytel/ytel/services/interceptors.dart';
 
 import '../../../helper/constants/strings.dart';
-import '../../../helper/widget/common_snackbar.dart';
 import '../../../utils/storage_utils.dart';
 
-class PurchaseSpecificNumber extends StatefulWidget {
-  PurchaseSpecificNumber({Key? key}) : super(key: key);
+class EditAccountsDetails extends StatefulWidget {
+  dynamic snapshot;
+
+  EditAccountsDetails({Key? key, required this.snapshot}) : super(key: key);
 
   @override
-  State<PurchaseSpecificNumber> createState() => _PurchaseSpecificNumberState();
+  State<EditAccountsDetails> createState() =>
+      _EditAccountsDetailsState(snapshot);
 }
 
-class _PurchaseSpecificNumberState extends State<PurchaseSpecificNumber> {
+class _EditAccountsDetailsState extends State<EditAccountsDetails> {
+  dynamic snapshot;
+
+  final TextEditingController name = TextEditingController();
+  final TextEditingController website = TextEditingController();
   final TextEditingController phoneNo = TextEditingController();
-  final TextEditingController numset= TextEditingController();
-  final TextEditingController cnam = TextEditingController();
 
-  
-
-  @override
-  void initState() {
-    super.initState();
-  }
+  var apiList;
+  bool _isLoading = false;
 
   String accessToken = StorageUtil.getString(StringHelper.ACCESS_TOKEN);
 
-  _PurchaseSpecificNumberState();
+  _EditAccountsDetailsState(this.snapshot);
   @override
   Widget build(BuildContext context) {
+    name.text = snapshot['name'] == null ? "" : snapshot['name'];
+    website.text = snapshot['domain'] == null ? "" : snapshot['domain'];
+    phoneNo.text = snapshot['phone'] == null ? "" : snapshot['phone'];
+
     //Display 3 screen defaultTabController
     Color color = ColorHelper.colors[9];
+    print(snapshot);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: ColorHelper.primaryTextColor,
-        title: Text("Purchase Specific Number",
-            style: TextStyle(color: Colors.white)),
-        
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            _inboundVoice(),
-          ],
+        title: Text(
+          "Edit Account",
+          style: TextStyle(color: Colors.white),
         ),
       ),
+      body: _isLoading == true
+          ? Center(
+              child: CircularProgressIndicator(
+                color: ColorHelper.colors[6],
+                strokeWidth: 1,
+              ),
+            )
+          : _userEdit(),
     );
   }
 
-  Widget _inboundVoice() {
+  Widget _userEdit() {
     return Center(
         child: Padding(
-      padding: const EdgeInsets.all(25.0),
+      padding: const EdgeInsets.all(10.0),
       child: SingleChildScrollView(
         child: Column(
           children: [
@@ -66,6 +74,59 @@ class _PurchaseSpecificNumberState extends State<PurchaseSpecificNumber> {
               height: 20,
             ),
 
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text("Name",
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                    )),
+              ],
+            ),
+            SizedBox(
+              height: 10,
+            ),
+
+            TextFormField(
+              controller: name,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(24.0),
+                ),
+                //border color
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text("Website",
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                    )),
+              ],
+            ),
+            SizedBox(
+              height: 10,
+            ),
+
+            //Display a form with 4 textfield named "Voice request URL","Voice Fallback URL","Hangup callback URL","heartbeat URL" with a side drop down button which has "POST" and "GET" as options and default value as "POST" with DropdownButtonHideUnderline
+
+            TextFormField(
+              controller: website,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(24),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 15,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -84,81 +145,18 @@ class _PurchaseSpecificNumberState extends State<PurchaseSpecificNumber> {
               controller: phoneNo,
               decoration: InputDecoration(
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(24.0),
-                ),
-                //border color
-              ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text("Number Set",
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                    )),
-              ],
-            ),
-            SizedBox(
-              height: 10,
-            ),
-
-            //Display a form with 4 textfield named "Voice request URL","Voice Fallback URL","Hangup callback URL","heartbeat URL" with a side drop down button which has "POST" and "GET" as options and default value as "POST" with DropdownButtonHideUnderline
-
-            TextFormField(
-              controller: numset,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(24),
                 ),
-                
               ),
             ),
             SizedBox(
               height: 15,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text("CNAM",
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                    )),
-              ],
-            ),
-            SizedBox(
-              height: 10,
-            ),
-
-            TextFormField(
-              controller: cnam,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(24),
-                ),
-               
-              ),
-            ),
-            SizedBox(
-              height: 15,
-            ),
-            
-            
-            
-            //Display a button named "Save"
           ],
         ),
       ),
     ));
   }
-
-  
-
- 
 
   Widget _inboxSave() {
     return Row(
@@ -197,15 +195,10 @@ class _PurchaseSpecificNumberState extends State<PurchaseSpecificNumber> {
             heroTag: "btn2",
             onPressed: () {
               //Put API to edit fields
-              putApi(
-                phoneNo.text,
-                numset.text,
-                cnam.text,
-                
-              );
+              putApi(name.text, website.text, phoneNo.text, snapshot['id']);
             },
             child: Text(
-              'Buy',
+              'Save',
               style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -221,20 +214,28 @@ class _PurchaseSpecificNumberState extends State<PurchaseSpecificNumber> {
     );
   }
 
- 
-  
-
   Future<void> putApi(
+    String name,
+    String website,
     String phoneNo,
-    String numSet,
-    String cnam,
+    String id,
   ) async {
-    String url = "https://api.ytel.com/api/v4/number/purchase/";
+    String url =
+        "https://api.ytel.com/ams/v2/accounts/d63d0a3c-921c-465f-ba58-d0cddae9d5ba";
 
-    Map<String, dynamic> body = {"phoneNumber":[phoneNo],"numberSetId":numSet,"cnam":cnam};
+    Map<String, dynamic> body = {
+      "domain": website,
+      "name": name,
+      "phone": phoneNo,
+      "isParentAcct": snapshot['isParentAcct'],
+      "parentAcctId": snapshot['parentAcctId'],
+      "source": snapshot['source'],
+      "status": snapshot['status'],
+      "id": id,
+    };
 
     try {
-      http.Response response = await http.post(
+      http.Response response = await http.put(
         Uri.parse(url),
         headers: {
           'Accept': 'application/json',
@@ -245,22 +246,22 @@ class _PurchaseSpecificNumberState extends State<PurchaseSpecificNumber> {
       );
 
       var data = jsonDecode(response.body);
-
-      /*
-      {"status":false,"count":0,"page":0,"error":[{"code":"404","message":"Number not found","moreInfo":null}]}
-     */
+      print(data);
 
       if (response.statusCode == 200) {
-        if (data['status'] == false) {
-          CommonSnackBar.showSnackbar("Error", data['error'][0]['message']);
-
-          
+        if (data['status'].runtimeType == String) {
+          CommonSnackBar.showSnackbar(
+            "Error",
+            data['message'],
+          );
           throw Exception(data['error'][0]['message']);
         }
         //Show success message
-       
-        CommonSnackBar.showSnackbar("Sucess", "Number Purchased successfully");
-
+        CommonSnackBar.showSnackbar(
+          "Success",
+          "Account updated successfully",
+        );
+        
       }
     } catch (e) {
       logger.e(e);

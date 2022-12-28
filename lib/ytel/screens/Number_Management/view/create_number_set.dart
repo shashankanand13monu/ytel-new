@@ -4,13 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:ytel/ytel/helper/constants/colors.dart';
+import 'package:ytel/ytel/helper/widget/common_snackbar.dart';
 import 'package:ytel/ytel/services/interceptors.dart';
 
 import '../../../helper/constants/strings.dart';
 import '../../../utils/storage_utils.dart';
-
-
-
 
 class CreateNumberSet extends StatefulWidget {
   String numberSetId;
@@ -58,7 +56,6 @@ class _CreateNumberSetState extends State<CreateNumberSet> {
   _CreateNumberSetState(this.numberSetId);
   @override
   Widget build(BuildContext context) {
-  
     //Display 3 screen defaultTabController
     Color color = ColorHelper.colors[9];
     return DefaultTabController(
@@ -66,14 +63,14 @@ class _CreateNumberSetState extends State<CreateNumberSet> {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: ColorHelper.primaryTextColor,
-          title:
-              Text("Create Number Set" ,style: 
-              TextStyle(color: Colors.white),),
+          title: Text(
+            "Create Number Set",
+            style: TextStyle(color: Colors.white),
+          ),
           bottom: TabBar(
             tabs: [
               Tab(text: "Inbound Voice"),
               Tab(text: "Inbound SMS"),
-              
             ],
           ),
         ),
@@ -90,7 +87,6 @@ class _CreateNumberSetState extends State<CreateNumberSet> {
                   //--------------------------------------------------------------------
                   _inboundSms(),
                   //--------------------------------------------------------------------
-                  
                 ],
               ),
       ),
@@ -401,8 +397,6 @@ class _CreateNumberSetState extends State<CreateNumberSet> {
     ));
   }
 
- 
-
   Widget _inboxSave() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
@@ -583,28 +577,28 @@ class _CreateNumberSetState extends State<CreateNumberSet> {
     String voice_fallback_URL,
     String hangup_callback_URL,
     String heartbeat_URL,
-    String friendly_name,) 
-    async {
+    String friendly_name,
+  ) async {
     String url = "https://api.ytel.com/api/v4/numberset/";
 
     Map<String, String> body = {
-     "forwardNumber":"",
-     "callerIdName":"",
-     "name":friendly_name,
-     "numberSetId":"",
-     "voiceUrl":voice_request_URL,
-     "voiceMethod":"POST",
-     "voiceFallbackUrl":voice_fallback_URL,
-     "voiceFallbackMethod":"POST",
-     "hangupCallbackUrl":hangup_callback_URL,
-     "hangupCallbackMethod":"POST",
-     "heartbeatUrl":heartbeat_URL,
-     "heartbeatMethod":"POST",
-     "smsUrl":"","smsMethod":"POST",
-     "smsFallbackUrl":"",
-     "smsFallbackMethod":"POST",
-     "cnam":""
-    
+      "forwardNumber": "",
+      "callerIdName": "",
+      "name": friendly_name,
+      "numberSetId": "",
+      "voiceUrl": voice_request_URL,
+      "voiceMethod": "POST",
+      "voiceFallbackUrl": voice_fallback_URL,
+      "voiceFallbackMethod": "POST",
+      "hangupCallbackUrl": hangup_callback_URL,
+      "hangupCallbackMethod": "POST",
+      "heartbeatUrl": heartbeat_URL,
+      "heartbeatMethod": "POST",
+      "smsUrl": "",
+      "smsMethod": "POST",
+      "smsFallbackUrl": "",
+      "smsFallbackMethod": "POST",
+      "cnam": ""
     };
 
     try {
@@ -625,12 +619,11 @@ class _CreateNumberSetState extends State<CreateNumberSet> {
           throw Exception(data['error'][0]['message']);
         }
         //Show success message
-        Get.snackbar(
-          "Success",
+        
+
+        CommonSnackBar.showSnackbar(
+          "Sucess",
           "Number updated successfully",
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.blue,
-          colorText: Colors.white,
         );
       }
     } catch (e) {
@@ -638,7 +631,8 @@ class _CreateNumberSetState extends State<CreateNumberSet> {
     }
   }
 
-  Future<void> putSMSApi( String sms_fallback_URL, String sms_request_URL) async {
+  Future<void> putSMSApi(
+      String sms_fallback_URL, String sms_request_URL) async {
     String url = "https://api.ytel.com/api/v4/numberset/";
 
     Map<String, String> body = {
@@ -667,21 +661,14 @@ class _CreateNumberSetState extends State<CreateNumberSet> {
 
       if (response.statusCode == 200) {
         if (data['status'] == false) {
+          CommonSnackBar.showSnackbar("Error", data['error'][0]['message']);
           throw Exception(data['error'][0]['message']);
         }
         //Show success message
-        Get.snackbar(
-          "Success",
-          "SMS updated successfully",
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.blue,
-          colorText: Colors.white,
-        );
+        CommonSnackBar.showSnackbar("Sucess", "Set Created Successfully");
       }
     } catch (e) {
       logger.e(e);
     }
   }
-
-  
 }

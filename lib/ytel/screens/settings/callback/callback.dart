@@ -5,9 +5,11 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:ytel/ytel/helper/widget/common_snackbar.dart';
 import 'package:ytel/ytel/screens/Number_Management/edit_number_set.dart';
 import 'package:ytel/ytel/screens/Number_Management/view/create_number_set.dart';
 import 'package:ytel/ytel/screens/Number_Management/view/edit_number.dart';
+import 'package:ytel/ytel/screens/auth/controller/callback_controller.dart';
 import 'package:ytel/ytel/screens/auth/controller/number_list_controller.dart';
 import 'package:ytel/ytel/screens/auth/controller/user_view_controller.dart';
 import 'package:csv/csv.dart';
@@ -16,17 +18,16 @@ import 'package:ytel/ytel/utils/storage_utils.dart';
 import '../../../helper/constants/colors.dart';
 import '../../../helper/constants/icons.dart';
 import '../../../helper/constants/strings.dart';
-import '../../../helper/widget/common_snackbar.dart';
 import '../../../services/interceptors.dart';
 
-class NumberSet extends StatefulWidget {
-  const NumberSet({super.key});
+class CallbackPage extends StatefulWidget {
+  const CallbackPage({super.key});
 
   @override
-  State<NumberSet> createState() => _NumberSetState();
+  State<CallbackPage> createState() => _CallbackPageState();
 }
 
-class _NumberSetState extends State<NumberSet> {
+class _CallbackPageState extends State<CallbackPage> {
   AsyncSnapshot<dynamic> snapshots = AsyncSnapshot<dynamic>.nothing();
 
   @override
@@ -44,29 +45,20 @@ class _NumberSetState extends State<NumberSet> {
   appbar() {
     return AppBar(
       backgroundColor: ColorHelper.primaryTextColor,
-      title: Text('Number Set', style: TextStyle(color: Colors.white)),
+      title: Text('Callbacks', style: TextStyle(color: Colors.white)),
       //Search icon in the end of appbar
       actions: [
         IconButton(
           onPressed: () async {
-            _downloadCSV();
           },
           icon: Icon(Icons.download),
         ),
         IconButton(
-          onPressed: () {
-            setState(() {
-              // search_pressed = !search_pressed;
-            });
-          },
+          onPressed: () {},
           icon: Icon(Icons.search),
         ),
         IconButton(
-          onPressed: () async {
-            Get.to(() => CreateNumberSet(
-                  numberSetId: snapshots.data!['payload'][0]['numberSetId'],
-                ));
-          },
+          onPressed: () {},
           icon: Icon(Icons.add),
         ),
         //Download icon
@@ -84,7 +76,7 @@ class _NumberSetState extends State<NumberSet> {
     return Expanded(
         child: Center(
       child: FutureBuilder(
-        future: number_list_controller.numberSetData(),
+        future: callback_controller.data(),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
@@ -131,24 +123,12 @@ class _NumberSetState extends State<NumberSet> {
                                   width: 15,
                                 ),
                                 Text(snapshot.data!['payload'][index]['name']
-                                            .toString()
-                                            .length >
-                                        25
-                                    ? snapshot.data!['payload'][index]['name']
-                                            .substring(0, 25) +
-                                        '...'
-                                    : snapshot.data!['payload'][index]['name']),
+                                    .toString()),
                                 Expanded(
                                     child: Align(
                                   alignment: Alignment.centerRight,
                                   child: InkWell(
-                                      onTap: () {
-                                        Get.to(() => EditNumberSet(
-                                              numberSetId:
-                                                  snapshot.data!['payload']
-                                                      [index]['numberSetId'],
-                                            ));
-                                      },
+                                      onTap: () {},
                                       child: Icon(
                                         IconHelper.icons[11],
                                         color: ColorHelper.colors[7],
@@ -172,10 +152,7 @@ class _NumberSetState extends State<NumberSet> {
                                 ),
 
                                 IconButton(
-                                    onPressed: () {
-                                      _deleteSet(snapshot.data!['payload']
-                                          [index]['numberSetId']);
-                                    },
+                                    onPressed: () {},
                                     icon: Icon(
                                       IconHelper.icons[12],
                                       color: ColorHelper.colors[2],
@@ -194,46 +171,6 @@ class _NumberSetState extends State<NumberSet> {
     ));
   }
 
-  _deleteSet(String numberSetid) async {
-    String url = "https://api.ytel.com/api/v4/numberset/$numberSetid/";
-
-    String accessToken = StorageUtil.getString(StringHelper.ACCESS_TOKEN);
-
-    try {
-      http.Response response = await http.delete(
-        Uri.parse(url),
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer $accessToken',
-        },
-      );
-
-      var data = jsonDecode(response.body);
-
-      if (response.statusCode == 200) {
-        if (data['status'] == false) {
-          
-        CommonSnackBar.showSnackbar("Error", data['error'][0]['message']);
-
-
-
-          throw Exception(data['error'][0]['message']);
-        }
-
-        setState(() {
-          
-        });
-        //Show success message
-        
-        CommonSnackBar.showSnackbar("Sucess", "Number deleted successfully");
-
-      }
-    } catch (e) {
-      logger.e(e);
-    }
-  }
-
   _numberDetails(int i) {
     return showModalBottomSheet(
         context: context,
@@ -245,7 +182,7 @@ class _NumberSetState extends State<NumberSet> {
                 child: Column(
                   children: [
                     ListTile(
-                      title: Text('Number Set Details',
+                      title: Text('Callback Details',
                           style: TextStyle(
                               color: ColorHelper.primaryTextColor,
                               fontWeight: FontWeight.bold)),
@@ -308,77 +245,5 @@ class _NumberSetState extends State<NumberSet> {
             ),
           );
         });
-  }
-
-  _downloadCSV() async {
-    //download csv file of snapshots.data
-
-    //convert in csv
-    List<List<dynamic>> rows = [];
-    List<dynamic> row = [];
-    row.add("accountSid");
-    row.add("phoneSid");
-    row.add("phoneNumber");
-    row.add("voiceUrl");
-    row.add("voiceMethod");
-    row.add("voiceFallbackUrl");
-    row.add("voiceFallbackMethod");
-    row.add("renewalDate");
-    row.add("purchaseDate");
-    row.add("region");
-    row.add("timezone");
-    row.add("smsUrl");
-    row.add("smsMethod");
-    row.add("smsFallbackUrl");
-    row.add("smsFallbackMethod");
-    row.add("heartbeatUrl");
-    row.add("heartbeatMethod");
-    row.add("hangupCallbackUrl");
-    row.add("hangupCallbackMethod");
-    rows.add(row);
-
-    for (Map i in snapshots.data['payload']) {
-      row = [];
-      row.add(i['accountSid']);
-      row.add(i['phoneSid']);
-      row.add(i['phoneNumber']);
-      row.add(i['voiceUrl']);
-      row.add(i['voiceMethod']);
-      row.add(i['voiceFallbackUrl']);
-      row.add(i['voiceFallbackMethod']);
-      row.add(i['renewalDate']);
-      row.add(i['purchaseDate']);
-      row.add(i['region']);
-      row.add(i['timezone']);
-      row.add(i['smsUrl']);
-      row.add(i['smsMethod']);
-      row.add(i['smsFallbackUrl']);
-      row.add(i['smsFallbackMethod']);
-      row.add(i['heartbeatUrl']);
-      row.add(i['heartbeatMethod']);
-      row.add(i['hangupCallbackUrl']);
-      row.add(i['hangupCallbackMethod']);
-      rows.add(row);
-    }
-
-    String csv = const ListToCsvConverter().convert(rows);
-    final String dir;
-    //Now time in string
-    var now = DateTime.now().toString();
-    //remove '.;:' from string
-    var now2 = now.replaceAll(RegExp(r'[.:]'), '');
-    if (Platform.isAndroid) {
-      dir = "/storage/emulated/0/Download";
-    } else {
-      dir = (await getApplicationDocumentsDirectory()).path;
-    }
-    // final String dir = (await getExternalStorageDirectory())!.path;
-    print(dir);
-    //Time in string
-
-    final String path = '$dir/numbers$now2.csv';
-
-    final File file = File(path);
-    await file.writeAsString(csv);
   }
 }

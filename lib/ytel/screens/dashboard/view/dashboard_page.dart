@@ -14,10 +14,16 @@ import 'package:ytel/ytel/screens/Number_Management/view/purchase_number.dart';
 import 'package:ytel/ytel/screens/Under_Development/under_devlopment.dart';
 import 'package:ytel/ytel/screens/accounts/account_screen.dart';
 import 'package:ytel/ytel/screens/chat/page/chats_page.dart';
+import 'package:ytel/ytel/screens/chat/users.dart';
 import 'package:ytel/ytel/screens/contact/view/contact_view.dart';
 import 'package:ytel/ytel/screens/dashboard/view/homescreen.dart';
 import 'package:ytel/ytel/screens/dashboard/view/logout.dart';
-import 'package:ytel/ytel/screens/users/view/user_view.dart';
+import 'package:ytel/ytel/screens/settings/accounts/accounts_page.dart';
+import 'package:ytel/ytel/screens/settings/api_token_page.dart';
+import 'package:ytel/ytel/screens/settings/assests.dart';
+import 'package:ytel/ytel/screens/settings/callback/callback.dart';
+import 'package:ytel/ytel/screens/settings/newUsers/users.dart';
+import 'package:ytel/ytel/screens/settings/view/user_view.dart';
 
 import '../../../helper/widget/rectangle_contaner.dart';
 import '../../../helper/widget/square_container.dart';
@@ -494,12 +500,12 @@ class _DashboardPageState extends State<DashboardPage> {
               ]),
               _commonMethod("assets/images/settings.png", "Settings", [
                 _commonListTile("Billing", const UnderDevelopment()),
-                _commonListTile("Accounts", const AccountPage()),
+                _commonListTile("Accounts", const AccountsPage()),
                 _commonListTile("Users", const UsersPage()),
                 _commonListTile("Buissness Profiles", const UnderDevelopment()),
-                _commonListTile("Assets", const UnderDevelopment()),
-                _commonListTile("API Tokens", const UnderDevelopment()),
-                _commonListTile("Callbacks", const UnderDevelopment()),
+                _commonListTile("Assets", const AssetPage()),
+                _commonListTile("API Tokens", const ApiToken()),
+                _commonListTile("Callbacks", const CallbackPage()),
                 _commonListTile("CNAM Management", const UnderDevelopment()),
                 _commonListTile("Compliance", const UnderDevelopment()),
                 _commonListTile("Audit", const UnderDevelopment()),

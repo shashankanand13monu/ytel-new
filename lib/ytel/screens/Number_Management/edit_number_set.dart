@@ -7,6 +7,7 @@ import 'package:ytel/ytel/helper/constants/colors.dart';
 import 'package:ytel/ytel/services/interceptors.dart';
 
 import '../../helper/constants/strings.dart';
+import '../../helper/widget/common_snackbar.dart';
 import '../../utils/storage_utils.dart';
 
 
@@ -627,13 +628,9 @@ class _EditNumberSetState extends State<EditNumberSet> {
           throw Exception(data['error'][0]['message']);
         }
         //Show success message
-        Get.snackbar(
-          "Success",
-          "Number updated successfully",
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.blue,
-          colorText: Colors.white,
-        );
+        
+        CommonSnackBar.showSnackbar("Sucess", "Number updated successfully");
+
       }
     } catch (e) {
       logger.e(e);
@@ -672,13 +669,10 @@ class _EditNumberSetState extends State<EditNumberSet> {
           throw Exception(data['error'][0]['message']);
         }
         //Show success message
-        Get.snackbar(
-          "Success",
-          "SMS updated successfully",
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.blue,
-          colorText: Colors.white,
-        );
+        
+
+        CommonSnackBar.showSnackbar("Sucess", "SMS updated successfully");
+
       }
     } catch (e) {
       logger.e(e);

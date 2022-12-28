@@ -5,6 +5,7 @@ class IconHelper {
 
   static IconData home = Icons.home;
 
+
   static const List<IconData> icons = [
     Icons.phone,
     Icons.phone_callback,
@@ -26,6 +27,7 @@ class IconHelper {
     Icons.more_vert,
     Icons.archive,
     Icons.info_outline,
+    Icons.token_outlined,
 
   ];
 }
