@@ -2,7 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:ytel/ytel/services/dio_client.dart';
 
 class ApiServices {
-
   var dio = DioClient();
 
   // Login
@@ -19,10 +18,11 @@ class ApiServices {
 
   // Account Config
   Future getAccountConfigData(String accountId) async {
-    Response response = await dio.getMethod("ams/v2/accounts/config/$accountId");
+    Response response =
+        await dio.getMethod("ams/v2/accounts/config/$accountId");
     return response;
   }
-  
+
   // Get Contacts
   Future getContactData() async {
     Response response = await dio.getMethod("api/v4/contact");
@@ -34,4 +34,8 @@ class ApiServices {
     return response;
   }
 
+  Future getSettingAssetData() async {
+    Response response = await dio.getMethod('api/v4/asset/');
+    return response;
+  }
 }
