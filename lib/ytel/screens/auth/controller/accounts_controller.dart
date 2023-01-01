@@ -12,7 +12,8 @@ class accounts_controller extends GetxController {
   
 
  static data() async{
-    String url = '${StringHelper.BASE_URL}ams/v2/accounts/subaccounts/7c8693c6-976e-4324-9123-2c1d811605f9/';
+    String accId = StorageUtil.getString(StringHelper.ACCOUNT_ID);
+    String url = '${StringHelper.BASE_URL}ams/v2/accounts/subaccounts/$accId/';
     String accessToken = StorageUtil.getString(StringHelper.ACCESS_TOKEN);
     
     try {

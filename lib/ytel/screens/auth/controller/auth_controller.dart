@@ -23,7 +23,7 @@ class AuthController extends GetxController {
         StorageUtil.putString(StringHelper.ACCESS_TOKEN, response.data["accessToken"]);
         StorageUtil.putBool(StringHelper.IS_LOGIN, true);
         Map<String, dynamic> decodedToken = JwtDecoder.decode(response.data["accessToken"]);
-        // StorageUtil.putString(StringHelper.ACCESS_TOKEN, decodedToken["acct"]);
+        StorageUtil.putString(StringHelper.ACCOUNT_ID, decodedToken["acct"]);
 
         logger.d("Decode Token: $decodedToken");
         getAllPrivileges();

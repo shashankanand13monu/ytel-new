@@ -7,10 +7,9 @@ import 'package:http/http.dart' as http;
 import '../../../helper/constants/strings.dart';
 import '../../../utils/storage_utils.dart';
 
-class callback_controller extends GetxController {
+class audit_controller extends GetxController {
   static data() async {
-    
-    String url = '${StringHelper.BASE_URL}api/v4/callback/configuration/';
+    String url = '${StringHelper.BASE_URL}api/v4/auditlog/login?startTimeMs=1672329823089&endTimeMs=1672416223089';
     String accessToken = StorageUtil.getString(StringHelper.ACCESS_TOKEN);
 
     try {

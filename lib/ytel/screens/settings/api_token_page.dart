@@ -306,8 +306,10 @@ class _ApiTokenState extends State<ApiToken> {
   }
 
   Future<void> putApi(String token, int day) async {
+    String accId = StorageUtil.getString(StringHelper.ACCOUNT_ID);
+
     String url =
-        "https://api.ytel.com/ams/v2/keys/account/7c8693c6-976e-4324-9123-2c1d811605f9/jti/";
+        "https://api.ytel.com/ams/v2/keys/account/$accId/jti/";
 
     Map<String, dynamic> body = {
       "description": token,

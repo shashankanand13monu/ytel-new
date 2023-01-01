@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
+import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
 import 'package:socket_io_client/socket_io_client.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -18,10 +19,15 @@ import 'package:ytel/ytel/screens/chat/users.dart';
 import 'package:ytel/ytel/screens/contact/view/contact_view.dart';
 import 'package:ytel/ytel/screens/dashboard/view/homescreen.dart';
 import 'package:ytel/ytel/screens/dashboard/view/logout.dart';
+import 'package:ytel/ytel/screens/reporting/usage.dart';
 import 'package:ytel/ytel/screens/settings/accounts/accounts_page.dart';
 import 'package:ytel/ytel/screens/settings/api_token_page.dart';
 import 'package:ytel/ytel/screens/settings/assests.dart';
+import 'package:ytel/ytel/screens/settings/audit/audit.dart';
+import 'package:ytel/ytel/screens/settings/billing/billing.dart';
 import 'package:ytel/ytel/screens/settings/callback/callback.dart';
+import 'package:ytel/ytel/screens/settings/cnam/cnam.dart';
+import 'package:ytel/ytel/screens/settings/compiliance/compiliance.dart';
 import 'package:ytel/ytel/screens/settings/newUsers/users.dart';
 import 'package:ytel/ytel/screens/settings/view/user_view.dart';
 
@@ -490,7 +496,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 _commonListTile("Number Sets", const NumberSet()),
               ]),
               _commonMethod("assets/images/call-center.png", "Reporting", [
-                _commonListTile("Usage", const UnderDevelopment()),
+                _commonListTile("Usage", const UsagePage()),
                 _commonListTile("Logs", const UnderDevelopment()),
                 _commonListTile("Routing statistics", const UnderDevelopment()),
                 _commonListTile("Tracking", const UnderDevelopment()),
@@ -499,16 +505,16 @@ class _DashboardPageState extends State<DashboardPage> {
                 _commonListTile("Workflow paths", const UnderDevelopment()),
               ]),
               _commonMethod("assets/images/settings.png", "Settings", [
-                _commonListTile("Billing", const UnderDevelopment()),
+                _commonListTile("Billing", const Billing()),
                 _commonListTile("Accounts", const AccountsPage()),
                 _commonListTile("Users", const UsersPage()),
                 _commonListTile("Buissness Profiles", const UnderDevelopment()),
                 _commonListTile("Assets", const AssetPage()),
                 _commonListTile("API Tokens", const ApiToken()),
                 _commonListTile("Callbacks", const CallbackPage()),
-                _commonListTile("CNAM Management", const UnderDevelopment()),
-                _commonListTile("Compliance", const UnderDevelopment()),
-                _commonListTile("Audit", const UnderDevelopment()),
+                _commonListTile("CNAM Management", const CnamPage()),
+                _commonListTile("Compliance", const CompiliancePage()),
+                _commonListTile("Audit", const AuditPage()),
               ]),
               _commonTile("Contact Center", const UnderDevelopment(),
                   "assets/images/customer-care.png"),
@@ -582,7 +588,13 @@ class _DashboardPageState extends State<DashboardPage> {
           ),
         ),
         onTap: () {
-          Get.to(() => navPage);
+        PersistentNavBarNavigator.pushNewScreen(
+        context,
+        screen: navPage,
+        withNavBar: true, // OPTIONAL VALUE. True by default.
+        pageTransitionAnimation: PageTransitionAnimation.cupertino,
+    );
+          // Get.to(() => navPage);
         },
       );
 }

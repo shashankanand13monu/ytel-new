@@ -4,13 +4,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
-import '../../../helper/constants/strings.dart';
-import '../../../utils/storage_utils.dart';
 
-class callback_controller extends GetxController {
+import '../../helper/constants/strings.dart';
+import '../../utils/storage_utils.dart';
+
+class usage_controller extends GetxController {
   static data() async {
-    
-    String url = '${StringHelper.BASE_URL}api/v4/callback/configuration/';
+    String url = '${StringHelper.BASE_URL}api/v4/billing/report/?startDate=2023-01-01&endDate=2023-01-01';
     String accessToken = StorageUtil.getString(StringHelper.ACCESS_TOKEN);
 
     try {

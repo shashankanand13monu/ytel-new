@@ -20,18 +20,15 @@ class LogoutDialog extends StatelessWidget {
         ElevatedButton(
           child: Text('Yes'),
           onPressed: () {
-            //Clear share preference and navigate to Login screen 
+            //Clear share preference and navigate to Login screen
             StorageUtil.putBool(StringHelper.IS_LOGIN, false);
-
+            StorageUtil.clearData();
             Get.offAll(() => const AuthPage());
-           
-
           },
         ),
         ElevatedButton(
           child: Text('No'),
           onPressed: () {
-           
             Get.back();
           },
         ),

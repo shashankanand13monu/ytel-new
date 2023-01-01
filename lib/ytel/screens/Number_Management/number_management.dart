@@ -17,16 +17,20 @@ class NumberManagement extends StatefulWidget {
   @override
   State<NumberManagement> createState() => _NumberManagementState();
 }
+AsyncSnapshot<dynamic> snapshots = AsyncSnapshot<dynamic>.nothing();
 
 class _NumberManagementState extends State<NumberManagement> {
-  AsyncSnapshot<dynamic> snapshots=AsyncSnapshot<dynamic>.nothing();
-  
+  TextEditingController searchController = TextEditingController();
+  bool search_pressed = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appbar(),
       body: Column(
         children: [
+          if (search_pressed) _searchNo(),
+          SizedBox(height: 10),
           body(),
         ],
       ),
@@ -42,14 +46,13 @@ class _NumberManagementState extends State<NumberManagement> {
         IconButton(
           onPressed: () async {
             _downloadCSV();
-            
           },
           icon: Icon(Icons.download),
         ),
         IconButton(
           onPressed: () {
             setState(() {
-              // search_pressed = !search_pressed;
+              search_pressed = !search_pressed;
             });
           },
           icon: Icon(Icons.search),
@@ -65,174 +68,36 @@ class _NumberManagementState extends State<NumberManagement> {
     );
   }
 
-  body() {
-  return Expanded(
-      child: Center(
-    child: FutureBuilder(
-      future: number_list_controller.numberData(),
-      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(
-            child: CircularProgressIndicator(
-              color: ColorHelper.colors[6],
-              strokeWidth: 1,
-            ),
-          );
-        } else if (snapshot.hasError) {
-          return Center(
-            child: CircularProgressIndicator(
-              color: ColorHelper.colors[6],
-              strokeWidth: 1,
-            ),
-          );
-        } else {
-          snapshots=snapshot;
-          return Column(
-            children: [
-              Expanded(
-                child: ListView.builder(
-                    itemCount: snapshot.data['payload'].length,
-                    itemBuilder: (context, int index) {
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          height: 50,
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(10)),
-                            // border: Border.all(),
-                          ),
-                          child: Row(
-                            children: [
-                              SizedBox(
-                                width: 5,
-                              ),
-                              Icon(
-                                IconHelper.icons[0],
-                                color: ColorHelper.colors[7],
-                              ),
-                              SizedBox(
-                                width: 15,
-                              ),
-                              Text(snapshot.data!['payload'][index]
-                                      ['phoneNumber']
-                                  .toString()),
-                              Expanded(
-                                  child: Align(
-                                alignment: Alignment.centerRight,
-                                child: InkWell(
-                                    onTap: () {
-                                      Get.to(() => EditPhoneNumber(
-                                          phoneId: snapshot.data!['payload']
-                                                  [index]['phoneNumber']
-                                              .toString()));
-                                    },
-                                    child: Icon(
-                                      IconHelper.icons[11],
-                                      color: ColorHelper.colors[7],
-                                    )),
-                              )),
-                              SizedBox(
-                                width: 7,
-                              ),
-                              //Icon button
-
-                              IconButton(
-                                  onPressed: () {
-                                    _numberDetails(index);
-                                  },
-                                  icon: Icon(
-                                    Icons.info_outline,
-                                    color: ColorHelper.colors[7],
-                                  )),
-                            ],
-                          ),
-                        ),
-                      );
-                    }),
-              )
-            ],
-          );
-        }
-      },
-    ),
-  ));
+  _searchNo() {
+    //return a container to input numbers
+    return Container(
+      padding: EdgeInsets.only(top: 15),
+      height: 50,
+      width: 300,
+      //rounded corners
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        color: Colors.white,
+      ),
+      child: TextField(
+        controller: searchController,
+        decoration: InputDecoration(
+          
+          hintText: 'Search',
+          border: OutlineInputBorder(),
+        ),
+      ),
+    );
+  }
 
   
-}
 
-_numberDetails(int i) {
-    return showModalBottomSheet(
-        context: context,
-        builder: (context) {
-          return SingleChildScrollView(
-            child: Container(
-              height: MediaQuery.of(context).size.height * 0.8,
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    ListTile(
-                      title: Text('Number Details',
-                          style: TextStyle(
-                              color: ColorHelper.primaryTextColor,
-                              fontWeight: FontWeight.bold)),
-                      trailing: IconButton(
-                          onPressed: () {
-                            Get.back();
-                          },
-                          icon: Icon(Icons.close)),
-                    ),
-                    Divider(
-                      thickness: 1,
-                    ),
-
-                    //Listview.builder for rows
-                    Container(
-                      height: 500,
-                      child: ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: snapshots.data!['payload'][i].length,
-                          
-                          itemBuilder: (context, int index) {
-                            return Row(
-                              children: [
-                                SizedBox(
-                                  width: 10,
-                                ),
-                               
-                                Text(
-                                  snapshots.data['payload'][i].keys.elementAt(index).toString()==null?'':snapshots.data['payload'][i].keys.elementAt(index).toString(),
-                                  style: TextStyle(
-                                      color: ColorHelper.primaryTextColor,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                //Text for value
-                               
-                                Text(snapshots.data['payload'][i].values.elementAt(index).toString()==null?'':snapshots.data['payload'][i].values.elementAt(index).toString()),
-                              ],
-                            );
-                            
-                            
-                          }),
-                    ),
-                    
-                    
-                  ],
-                ),
-              ),
-            ),
-          );
-        });
-  }
+  
 
   _downloadCSV() async {
     //download csv file of snapshots.data
 
-  //convert in csv
+    //convert in csv
     List<List<dynamic>> rows = [];
     List<dynamic> row = [];
     row.add("accountSid");
@@ -296,13 +161,179 @@ _numberDetails(int i) {
     //Time in string
 
     final String path = '$dir/numbers$now2.csv';
-    
+
     final File file = File(path);
     await file.writeAsString(csv);
-
-
   }
-  
 }
 
+_numberDetails(int i, BuildContext context) {
+    return showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return SingleChildScrollView(
+            child: Container(
+              height: MediaQuery.of(context).size.height * 0.8,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    ListTile(
+                      title: Text('Number Details',
+                          style: TextStyle(
+                              color: ColorHelper.primaryTextColor,
+                              fontWeight: FontWeight.bold)),
+                      trailing: IconButton(
+                          onPressed: () {
+                            Get.back();
+                          },
+                          icon: Icon(Icons.close)),
+                    ),
+                    Divider(
+                      thickness: 1,
+                    ),
 
+                    //Listview.builder for rows
+                    Container(
+                      height: 500,
+                      child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: snapshots.data!['payload'][i].length,
+                          itemBuilder: (context, int index) {
+                            return Row(
+                              children: [
+                                SizedBox(
+                                  width: 10,
+                                ),
+
+                                Text(
+                                  snapshots.data['payload'][i].keys
+                                              .elementAt(index)
+                                              .toString() ==
+                                          null
+                                      ? ''
+                                      : snapshots.data['payload'][i].keys
+                                          .elementAt(index)
+                                          .toString(),
+                                  style: TextStyle(
+                                      color: ColorHelper.primaryTextColor,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                //Text for value
+
+                                Text(snapshots.data['payload'][i].values
+                                            .elementAt(index)
+                                            .toString() ==
+                                        null
+                                    ? ''
+                                    : snapshots.data['payload'][i].values
+                                        .elementAt(index)
+                                        .toString()),
+                              ],
+                            );
+                          }),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
+  }
+
+body() {
+    return Expanded(
+        child: Center(
+      child: FutureBuilder(
+        future: number_list_controller.numberData(),
+        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(
+                color: ColorHelper.colors[6],
+                strokeWidth: 1,
+              ),
+            );
+          } else if (snapshot.hasError) {
+            return Center(
+              child: CircularProgressIndicator(
+                color: ColorHelper.colors[6],
+                strokeWidth: 1,
+              ),
+            );
+          } else {
+            snapshots = snapshot;
+            return Column(
+              children: [
+                Expanded(
+                  child: ListView.builder(
+                      itemCount: snapshot.data['payload'].length,
+                      itemBuilder: (context, int index) {
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            height: 50,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
+                              // border: Border.all(),
+                            ),
+                            child: Row(
+                              children: [
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                Icon(
+                                  IconHelper.icons[0],
+                                  color: ColorHelper.colors[7],
+                                ),
+                                SizedBox(
+                                  width: 15,
+                                ),
+                                Text(snapshot.data!['payload'][index]
+                                        ['phoneNumber']
+                                    .toString()),
+                                Expanded(
+                                    child: Align(
+                                  alignment: Alignment.centerRight,
+                                  child: InkWell(
+                                      onTap: () {
+                                        Get.to(() => EditPhoneNumber(
+                                            phoneId: snapshot.data!['payload']
+                                                    [index]['phoneNumber']
+                                                .toString()));
+                                      },
+                                      child: Icon(
+                                        IconHelper.icons[11],
+                                        color: ColorHelper.colors[7],
+                                      )),
+                                )),
+                                SizedBox(
+                                  width: 7,
+                                ),
+                                //Icon button
+
+                                IconButton(
+                                    onPressed: () {
+                                      _numberDetails(index,context);
+                                    },
+                                    icon: Icon(
+                                      Icons.info_outline,
+                                      color: ColorHelper.colors[7],
+                                    )),
+                              ],
+                            ),
+                          ),
+                        );
+                      }),
+                )
+              ],
+            );
+          }
+        },
+      ),
+    ));
+  }

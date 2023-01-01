@@ -11,7 +11,9 @@ import 'package:http/http.dart' as http;
 class user_view_accounts_controller{
   static final account_controller = new TextEditingController();
   static data() async{
-    String url = '${StringHelper.BASE_URL}ams/v2/accounts/7c8693c6-976e-4324-9123-2c1d811605f9/';
+    String accId = StorageUtil.getString(StringHelper.ACCOUNT_ID);
+
+    String url = '${StringHelper.BASE_URL}ams/v2/accounts/$accId/';
     String accessToken = StorageUtil.getString(StringHelper.ACCESS_TOKEN);
 
     try {

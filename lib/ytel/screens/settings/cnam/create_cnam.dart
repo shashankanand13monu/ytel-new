@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -10,43 +11,34 @@ import 'package:ytel/ytel/services/interceptors.dart';
 import '../../../helper/constants/strings.dart';
 import '../../../utils/storage_utils.dart';
 
-class EditAccountsDetails extends StatefulWidget {
-  dynamic snapshot;
-
-  EditAccountsDetails({Key? key, required this.snapshot}) : super(key: key);
+class CreateCnam extends StatefulWidget {
+  CreateCnam({
+    Key? key,
+  }) : super(key: key);
 
   @override
-  State<EditAccountsDetails> createState() =>
-      _EditAccountsDetailsState(snapshot);
+  State<CreateCnam> createState() => _CreateCnamState();
 }
 
-class _EditAccountsDetailsState extends State<EditAccountsDetails> {
-  dynamic snapshot;
-
+class _CreateCnamState extends State<CreateCnam> {
   final TextEditingController name = TextEditingController();
-  final TextEditingController website = TextEditingController();
-  final TextEditingController phoneNo = TextEditingController();
+ 
 
   var apiList;
   bool _isLoading = false;
 
   String accessToken = StorageUtil.getString(StringHelper.ACCESS_TOKEN);
 
-  _EditAccountsDetailsState(this.snapshot);
+  _CreateCnamState();
   @override
   Widget build(BuildContext context) {
-    name.text = snapshot['name'] == null ? "" : snapshot['name'];
-    website.text = snapshot['domain'] == null ? "" : snapshot['domain'];
-    phoneNo.text = snapshot['phone'] == null ? "" : snapshot['phone'];
-
     //Display 3 screen defaultTabController
     Color color = ColorHelper.colors[9];
-    print(snapshot);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: ColorHelper.primaryTextColor,
         title: Text(
-          "Edit Account",
+          "Request CNAM",
           style: TextStyle(color: Colors.white),
         ),
       ),
@@ -100,58 +92,7 @@ class _EditAccountsDetailsState extends State<EditAccountsDetails> {
             SizedBox(
               height: 20,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text("Website",
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                    )),
-              ],
-            ),
-            SizedBox(
-              height: 10,
-            ),
-
-            //Display a form with 4 textfield named "Voice request URL","Voice Fallback URL","Hangup callback URL","heartbeat URL" with a side drop down button which has "POST" and "GET" as options and default value as "POST" with DropdownButtonHideUnderline
-
-            TextFormField(
-              controller: website,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(24),
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 15,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text("Phone Number",
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                    )),
-              ],
-            ),
-            SizedBox(
-              height: 10,
-            ),
-
-            TextFormField(
-              controller: phoneNo,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(24),
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 15,
-            ),
+            
           ],
         ),
       ),
@@ -195,7 +136,10 @@ class _EditAccountsDetailsState extends State<EditAccountsDetails> {
             heroTag: "btn2",
             onPressed: () {
               //Put API to edit fields
-              putApi(name.text, website.text, phoneNo.text, snapshot['id']);
+              putApi(
+                name.text,
+               
+              );
             },
             child: Text(
               'Save',
@@ -216,26 +160,16 @@ class _EditAccountsDetailsState extends State<EditAccountsDetails> {
 
   Future<void> putApi(
     String name,
-    String website,
-    String phoneNo,
-    String id,
+  
   ) async {
-    String url =
-        "https://api.ytel.com/ams/v2/accounts/$id";
+    String url = "https://api.ytel.com/api/v4/callback/configuration/";
 
     Map<String, dynamic> body = {
-      "domain": website,
-      "name": name,
-      "phone": phoneNo,
-      "isParentAcct": snapshot['isParentAcct'],
-      "parentAcctId": snapshot['parentAcctId'],
-      "source": snapshot['source'],
-      "status": snapshot['status'],
-      "id": id,
+     
     };
 
     try {
-      http.Response response = await http.put(
+      http.Response response = await http.post(
         Uri.parse(url),
         headers: {
           'Accept': 'application/json',
@@ -246,22 +180,17 @@ class _EditAccountsDetailsState extends State<EditAccountsDetails> {
       );
 
       var data = jsonDecode(response.body);
-      print(data);
-
       if (response.statusCode == 200) {
-        if (data['status'].runtimeType == String) {
-          CommonSnackBar.showSnackbar(
-            "Error",
-            data['message'],
-          );
+        if (data['status'] == false) {
+
+          CommonSnackBar.showSnackbar("Error", data['error'][0]['message']);
           throw Exception(data['error'][0]['message']);
+        } else {
+          CommonSnackBar.showSnackbar(
+              "Sucess", "Callback Created successfully");
         }
         //Show success message
-        CommonSnackBar.showSnackbar(
-          "Success",
-          "Account updated successfully",
-        );
-        
+
       }
     } catch (e) {
       logger.e(e);

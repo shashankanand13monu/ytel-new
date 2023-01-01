@@ -12,7 +12,9 @@ import '../../../utils/storage_utils.dart';
 class user_view_controller extends GetxController {
   static final account_controller = new TextEditingController();
   static data() async{
-    String url = '${StringHelper.BASE_URL}ams/v2/accounts/users/7c8693c6-976e-4324-9123-2c1d811605f9/';
+    String accId = StorageUtil.getString(StringHelper.ACCOUNT_ID);
+
+    String url = '${StringHelper.BASE_URL}ams/v2/accounts/users/$accId/';
     String accessToken = StorageUtil.getString(StringHelper.ACCESS_TOKEN);
     try {
       print("Inside Try");

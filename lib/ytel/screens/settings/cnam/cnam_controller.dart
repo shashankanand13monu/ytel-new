@@ -7,10 +7,9 @@ import 'package:http/http.dart' as http;
 import '../../../helper/constants/strings.dart';
 import '../../../utils/storage_utils.dart';
 
-class callback_controller extends GetxController {
+class cnam_controller extends GetxController {
   static data() async {
-    
-    String url = '${StringHelper.BASE_URL}api/v4/callback/configuration/';
+    String url = '${StringHelper.BASE_URL}api/v4/account/cnam/';
     String accessToken = StorageUtil.getString(StringHelper.ACCESS_TOKEN);
 
     try {

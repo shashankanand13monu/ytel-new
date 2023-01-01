@@ -10,34 +10,34 @@ import 'package:ytel/ytel/services/interceptors.dart';
 import '../../../helper/constants/strings.dart';
 import '../../../utils/storage_utils.dart';
 
-class EditAccountsDetails extends StatefulWidget {
+class EditCallback extends StatefulWidget {
   dynamic snapshot;
 
-  EditAccountsDetails({Key? key, required this.snapshot}) : super(key: key);
+  EditCallback({Key? key, required this.snapshot}) : super(key: key);
 
   @override
-  State<EditAccountsDetails> createState() =>
-      _EditAccountsDetailsState(snapshot);
+  State<EditCallback> createState() =>
+      _EditCallbackState(snapshot);
 }
 
-class _EditAccountsDetailsState extends State<EditAccountsDetails> {
+class _EditCallbackState extends State<EditCallback> {
   dynamic snapshot;
 
   final TextEditingController name = TextEditingController();
   final TextEditingController website = TextEditingController();
-  final TextEditingController phoneNo = TextEditingController();
+  final TextEditingController method = TextEditingController();
 
   var apiList;
   bool _isLoading = false;
 
   String accessToken = StorageUtil.getString(StringHelper.ACCESS_TOKEN);
 
-  _EditAccountsDetailsState(this.snapshot);
+  _EditCallbackState(this.snapshot);
   @override
   Widget build(BuildContext context) {
     name.text = snapshot['name'] == null ? "" : snapshot['name'];
-    website.text = snapshot['domain'] == null ? "" : snapshot['domain'];
-    phoneNo.text = snapshot['phone'] == null ? "" : snapshot['phone'];
+    website.text = snapshot['url'] == null ? "" : snapshot['url'];
+    method.text = snapshot['httpMethod'] == null ? "" : snapshot['httpMethod'];
 
     //Display 3 screen defaultTabController
     Color color = ColorHelper.colors[9];
@@ -46,7 +46,7 @@ class _EditAccountsDetailsState extends State<EditAccountsDetails> {
       appBar: AppBar(
         backgroundColor: ColorHelper.primaryTextColor,
         title: Text(
-          "Edit Account",
+          "Edit Callback",
           style: TextStyle(color: Colors.white),
         ),
       ),
@@ -103,7 +103,7 @@ class _EditAccountsDetailsState extends State<EditAccountsDetails> {
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Text("Website",
+                Text("Request URL",
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
@@ -130,7 +130,7 @@ class _EditAccountsDetailsState extends State<EditAccountsDetails> {
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Text("Phone Number",
+                Text("Method",
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
@@ -142,7 +142,7 @@ class _EditAccountsDetailsState extends State<EditAccountsDetails> {
             ),
 
             TextFormField(
-              controller: phoneNo,
+              controller: method,
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(24),
@@ -195,7 +195,7 @@ class _EditAccountsDetailsState extends State<EditAccountsDetails> {
             heroTag: "btn2",
             onPressed: () {
               //Put API to edit fields
-              putApi(name.text, website.text, phoneNo.text, snapshot['id']);
+              putApi(name.text, website.text, method.text, snapshot['id']);
             },
             child: Text(
               'Save',
@@ -217,21 +217,26 @@ class _EditAccountsDetailsState extends State<EditAccountsDetails> {
   Future<void> putApi(
     String name,
     String website,
-    String phoneNo,
+    String method,
     String id,
   ) async {
     String url =
-        "https://api.ytel.com/ams/v2/accounts/$id";
+        "https://api.ytel.com/api/v4/callback/configuration/$id/";
 
     Map<String, dynamic> body = {
-      "domain": website,
       "name": name,
-      "phone": phoneNo,
-      "isParentAcct": snapshot['isParentAcct'],
-      "parentAcctId": snapshot['parentAcctId'],
-      "source": snapshot['source'],
-      "status": snapshot['status'],
-      "id": id,
+      "enabled":true,
+      "callbackServerConfigId":snapshot['callbackServerConfigId'],
+      "httpMethod":method,
+      "contentType":snapshot['contentType'],
+      "eventType":snapshot['eventType'],
+      "headers":{},
+      "responseMapping":{},
+      "errorResponseMapping":{},
+      "failureStrategy":{"retryStrategy":"none","retryCount":1,"retryDelaySeconds":2},
+      "successPath":"HTTP_OK",
+      "successValue":"",
+      "url":website,
     };
 
     try {
@@ -259,7 +264,7 @@ class _EditAccountsDetailsState extends State<EditAccountsDetails> {
         //Show success message
         CommonSnackBar.showSnackbar(
           "Success",
-          "Account updated successfully",
+          "Callback updated successfully",
         );
         
       }

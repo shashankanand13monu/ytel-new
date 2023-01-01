@@ -28,6 +28,11 @@ class IconHelper {
     Icons.archive,
     Icons.info_outline,
     Icons.token_outlined,
+    Icons.close,
+    Icons.attach_money_outlined,
+    Icons.verified_rounded,
+    Icons.data_usage_rounded,
+    
 
   ];
 }

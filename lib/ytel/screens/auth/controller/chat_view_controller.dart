@@ -19,9 +19,10 @@ class chat_view_controller extends GetxController {
     else{
       days='90';
     }
+    String accId = StorageUtil.getString(StringHelper.ACCOUNT_ID);
     
     String url =
-        '${StringHelper.BASE_URL}api/v4/inbox/?inbox=7c8693c6-976e-4324-9123-2c1d811605f9&open=open&days=$days&length=5001';
+        '${StringHelper.BASE_URL}api/v4/inbox/?inbox=$accId&open=open&days=$days&length=5001';
     String accessToken = StorageUtil.getString(StringHelper.ACCESS_TOKEN);
 
     try {

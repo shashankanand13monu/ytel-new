@@ -4,32 +4,25 @@ import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:ytel/ytel/screens/Number_Management/edit_number_set.dart';
-import 'package:ytel/ytel/screens/Number_Management/view/create_number_set.dart';
-import 'package:ytel/ytel/screens/Number_Management/view/edit_number.dart';
-import 'package:ytel/ytel/screens/auth/controller/number_list_controller.dart';
-import 'package:ytel/ytel/screens/auth/controller/user_view_controller.dart';
-import 'package:csv/csv.dart';
+
+import 'package:ytel/ytel/screens/settings/cnam/cnam_controller.dart';
+import 'package:ytel/ytel/screens/settings/cnam/create_cnam.dart';
 import 'package:ytel/ytel/utils/storage_utils.dart';
 
 import '../../../helper/constants/colors.dart';
 import '../../../helper/constants/icons.dart';
 import '../../../helper/constants/strings.dart';
-import '../../../helper/widget/common_snackbar.dart';
 import '../../../services/interceptors.dart';
 
-class NumberSet extends StatefulWidget {
-  const NumberSet({super.key});
+class CnamPage extends StatefulWidget {
+  const CnamPage({super.key});
 
   @override
-  State<NumberSet> createState() => _NumberSetState();
+  State<CnamPage> createState() => _CnamPageState();
 }
 
-class _NumberSetState extends State<NumberSet> {
+class _CnamPageState extends State<CnamPage> {
   AsyncSnapshot<dynamic> snapshots = AsyncSnapshot<dynamic>.nothing();
-  TextEditingController searchController = TextEditingController();
-  bool search_pressed = false;
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +30,6 @@ class _NumberSetState extends State<NumberSet> {
       appBar: appbar(),
       body: Column(
         children: [
-          if(search_pressed) _searchNo(),
           body(),
         ],
       ),
@@ -47,28 +39,17 @@ class _NumberSetState extends State<NumberSet> {
   appbar() {
     return AppBar(
       backgroundColor: ColorHelper.primaryTextColor,
-      title: Text('Number Set', style: TextStyle(color: Colors.white)),
+      title: Text('CNAM Management', style: TextStyle(color: Colors.white)),
       //Search icon in the end of appbar
       actions: [
+        
         IconButton(
-          onPressed: () async {
-            _downloadCSV();
-          },
-          icon: Icon(Icons.download),
-        ),
-        IconButton(
-          onPressed: () {
-            setState(() {
-              search_pressed = !search_pressed;
-            });
-          },
+          onPressed: () {},
           icon: Icon(Icons.search),
         ),
         IconButton(
-          onPressed: () async {
-            Get.to(() => CreateNumberSet(
-                  numberSetId: snapshots.data!['payload'][0]['numberSetId'],
-                ));
+          onPressed: () {
+            Get.to(() => CreateCnam());
           },
           icon: Icon(Icons.add),
         ),
@@ -87,7 +68,7 @@ class _NumberSetState extends State<NumberSet> {
     return Expanded(
         child: Center(
       child: FutureBuilder(
-        future: number_list_controller.numberSetData(),
+        future: cnam_controller.data(),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
@@ -133,27 +114,17 @@ class _NumberSetState extends State<NumberSet> {
                                 SizedBox(
                                   width: 15,
                                 ),
-                                Text(snapshot.data!['payload'][index]['name']
-                                            .toString()
-                                            .length >
-                                        25
-                                    ? snapshot.data!['payload'][index]['name']
-                                            .substring(0, 25) +
-                                        '...'
-                                    : snapshot.data!['payload'][index]['name']),
+                                Text(snapshot.data!['payload'][index]['cnam']
+                                    .toString()),
                                 Expanded(
                                     child: Align(
                                   alignment: Alignment.centerRight,
                                   child: InkWell(
                                       onTap: () {
-                                        Get.to(() => EditNumberSet(
-                                              numberSetId:
-                                                  snapshot.data!['payload']
-                                                      [index]['numberSetId'],
-                                            ));
+                                        
                                       },
                                       child: Icon(
-                                        IconHelper.icons[11],
+                                        IconHelper.icons[21],
                                         color: ColorHelper.colors[7],
                                       )),
                                 )),
@@ -170,19 +141,7 @@ class _NumberSetState extends State<NumberSet> {
                                       Icons.info_outline,
                                       color: ColorHelper.colors[7],
                                     )),
-                                SizedBox(
-                                  width: 7,
-                                ),
-
-                                IconButton(
-                                    onPressed: () {
-                                      _deleteSet(snapshot.data!['payload']
-                                          [index]['numberSetId']);
-                                    },
-                                    icon: Icon(
-                                      IconHelper.icons[12],
-                                      color: ColorHelper.colors[2],
-                                    )),
+                                
                               ],
                             ),
                           ),
@@ -197,46 +156,6 @@ class _NumberSetState extends State<NumberSet> {
     ));
   }
 
-  _deleteSet(String numberSetid) async {
-    String url = "https://api.ytel.com/api/v4/numberset/$numberSetid/";
-
-    String accessToken = StorageUtil.getString(StringHelper.ACCESS_TOKEN);
-
-    try {
-      http.Response response = await http.delete(
-        Uri.parse(url),
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer $accessToken',
-        },
-      );
-
-      var data = jsonDecode(response.body);
-
-      if (response.statusCode == 200) {
-        if (data['status'] == false) {
-          
-        CommonSnackBar.showSnackbar("Error", data['error'][0]['message']);
-
-
-
-          throw Exception(data['error'][0]['message']);
-        }
-
-        setState(() {
-          
-        });
-        //Show success message
-        
-        CommonSnackBar.showSnackbar("Sucess", "Number deleted successfully");
-
-      }
-    } catch (e) {
-      logger.e(e);
-    }
-  }
-
   _numberDetails(int i) {
     return showModalBottomSheet(
         context: context,
@@ -248,7 +167,7 @@ class _NumberSetState extends State<NumberSet> {
                 child: Column(
                   children: [
                     ListTile(
-                      title: Text('Number Set Details',
+                      title: Text('Cnam Details',
                           style: TextStyle(
                               color: ColorHelper.primaryTextColor,
                               fontWeight: FontWeight.bold)),
@@ -312,99 +231,4 @@ class _NumberSetState extends State<NumberSet> {
           );
         });
   }
-
-  _downloadCSV() async {
-    //download csv file of snapshots.data
-
-    //convert in csv
-    List<List<dynamic>> rows = [];
-    List<dynamic> row = [];
-    row.add("accountSid");
-    row.add("phoneSid");
-    row.add("phoneNumber");
-    row.add("voiceUrl");
-    row.add("voiceMethod");
-    row.add("voiceFallbackUrl");
-    row.add("voiceFallbackMethod");
-    row.add("renewalDate");
-    row.add("purchaseDate");
-    row.add("region");
-    row.add("timezone");
-    row.add("smsUrl");
-    row.add("smsMethod");
-    row.add("smsFallbackUrl");
-    row.add("smsFallbackMethod");
-    row.add("heartbeatUrl");
-    row.add("heartbeatMethod");
-    row.add("hangupCallbackUrl");
-    row.add("hangupCallbackMethod");
-    rows.add(row);
-
-    for (Map i in snapshots.data['payload']) {
-      row = [];
-      row.add(i['accountSid']);
-      row.add(i['phoneSid']);
-      row.add(i['phoneNumber']);
-      row.add(i['voiceUrl']);
-      row.add(i['voiceMethod']);
-      row.add(i['voiceFallbackUrl']);
-      row.add(i['voiceFallbackMethod']);
-      row.add(i['renewalDate']);
-      row.add(i['purchaseDate']);
-      row.add(i['region']);
-      row.add(i['timezone']);
-      row.add(i['smsUrl']);
-      row.add(i['smsMethod']);
-      row.add(i['smsFallbackUrl']);
-      row.add(i['smsFallbackMethod']);
-      row.add(i['heartbeatUrl']);
-      row.add(i['heartbeatMethod']);
-      row.add(i['hangupCallbackUrl']);
-      row.add(i['hangupCallbackMethod']);
-      rows.add(row);
-    }
-
-    String csv = const ListToCsvConverter().convert(rows);
-    final String dir;
-    //Now time in string
-    var now = DateTime.now().toString();
-    //remove '.;:' from string
-    var now2 = now.replaceAll(RegExp(r'[.:]'), '');
-    if (Platform.isAndroid) {
-      dir = "/storage/emulated/0/Download";
-    } else {
-      dir = (await getApplicationDocumentsDirectory()).path;
-    }
-    // final String dir = (await getExternalStorageDirectory())!.path;
-    print(dir);
-    //Time in string
-
-    final String path = '$dir/numbers$now2.csv';
-
-    final File file = File(path);
-    await file.writeAsString(csv);
-  }
-
-_searchNo() {
-    //return a container to input numbers
-    return Container(
-      padding: EdgeInsets.only(top: 15),
-      height: 50,
-      width: 300,
-      //rounded corners
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        color: Colors.white,
-      ),
-      child: TextField(
-        controller: searchController,
-        decoration: InputDecoration(
-          
-          hintText: 'Search',
-          border: OutlineInputBorder(),
-        ),
-      ),
-    );
-  }
-
 }

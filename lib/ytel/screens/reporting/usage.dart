@@ -4,32 +4,26 @@ import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:ytel/ytel/helper/widget/common_snackbar.dart';
-import 'package:ytel/ytel/screens/Number_Management/edit_number_set.dart';
-import 'package:ytel/ytel/screens/Number_Management/view/create_number_set.dart';
-import 'package:ytel/ytel/screens/Number_Management/view/edit_number.dart';
-import 'package:ytel/ytel/screens/auth/controller/callback_controller.dart';
-import 'package:ytel/ytel/screens/auth/controller/number_list_controller.dart';
-import 'package:ytel/ytel/screens/auth/controller/user_view_controller.dart';
-import 'package:csv/csv.dart';
-import 'package:ytel/ytel/screens/settings/callback/create_callback.dart';
-import 'package:ytel/ytel/screens/settings/callback/edit_callback.dart';
+import 'package:ytel/ytel/screens/reporting/usage_controller.dart';
+import 'package:ytel/ytel/screens/settings/audit/audit_controller.dart';
+
+import 'package:ytel/ytel/screens/settings/cnam/cnam_controller.dart';
+import 'package:ytel/ytel/screens/settings/cnam/create_cnam.dart';
 import 'package:ytel/ytel/utils/storage_utils.dart';
 
-import '../../../helper/constants/colors.dart';
-import '../../../helper/constants/icons.dart';
-import '../../../helper/constants/strings.dart';
-import '../../../services/interceptors.dart';
 
-class CallbackPage extends StatefulWidget {
-  const CallbackPage({super.key});
+import '../../helper/constants/colors.dart';
+import '../../helper/constants/icons.dart';
+
+
+class UsagePage extends StatefulWidget {
+  const UsagePage({super.key});
 
   @override
-  State<CallbackPage> createState() => _CallbackPageState();
+  State<UsagePage> createState() => _UsagePageState();
 }
 
-class _CallbackPageState extends State<CallbackPage> {
+class _UsagePageState extends State<UsagePage> {
   AsyncSnapshot<dynamic> snapshots = AsyncSnapshot<dynamic>.nothing();
 
   @override
@@ -47,7 +41,7 @@ class _CallbackPageState extends State<CallbackPage> {
   appbar() {
     return AppBar(
       backgroundColor: ColorHelper.primaryTextColor,
-      title: Text('Callbacks', style: TextStyle(color: Colors.white)),
+      title: Text('Usage', style: TextStyle(color: Colors.white)),
       //Search icon in the end of appbar
       actions: [
         
@@ -55,12 +49,7 @@ class _CallbackPageState extends State<CallbackPage> {
           onPressed: () {},
           icon: Icon(Icons.search),
         ),
-        IconButton(
-          onPressed: () {
-            Get.to(() => CreateCallback());
-          },
-          icon: Icon(Icons.add),
-        ),
+       
         //Download icon
       ],
       leading: IconButton(
@@ -76,7 +65,7 @@ class _CallbackPageState extends State<CallbackPage> {
     return Expanded(
         child: Center(
       child: FutureBuilder(
-        future: callback_controller.data(),
+        future: usage_controller.data(),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
@@ -116,51 +105,29 @@ class _CallbackPageState extends State<CallbackPage> {
                                   width: 5,
                                 ),
                                 Icon(
-                                  IconHelper.icons[0],
+                                  IconHelper.icons[24],
                                   color: ColorHelper.colors[7],
                                 ),
                                 SizedBox(
                                   width: 15,
                                 ),
-                                Text(snapshot.data!['payload'][index]['name']
+                                Text(snapshot.data!['payload'][index]['description']
                                     .toString()),
                                 Expanded(
                                     child: Align(
                                   alignment: Alignment.centerRight,
                                   child: InkWell(
                                       onTap: () {
-                                        Get.to(EditCallback(
-                                            snapshot: snapshot.data['payload']
-                                                [index]));
+                                      _numberDetails(index);
+                                        
                                       },
                                       child: Icon(
-                                        IconHelper.icons[11],
+                                        IconHelper.icons[19],
                                         color: ColorHelper.colors[7],
                                       )),
                                 )),
-                                SizedBox(
-                                  width: 7,
-                                ),
-                                //Icon button
-
-                                IconButton(
-                                    onPressed: () {
-                                      _numberDetails(index);
-                                    },
-                                    icon: Icon(
-                                      Icons.info_outline,
-                                      color: ColorHelper.colors[7],
-                                    )),
-                                SizedBox(
-                                  width: 7,
-                                ),
-
-                                IconButton(
-                                    onPressed: () {},
-                                    icon: Icon(
-                                      IconHelper.icons[12],
-                                      color: ColorHelper.colors[2],
-                                    )),
+                               
+                                
                               ],
                             ),
                           ),
@@ -186,7 +153,7 @@ class _CallbackPageState extends State<CallbackPage> {
                 child: Column(
                   children: [
                     ListTile(
-                      title: Text('Callback Details',
+                      title: Text('Usage Details',
                           style: TextStyle(
                               color: ColorHelper.primaryTextColor,
                               fontWeight: FontWeight.bold)),
