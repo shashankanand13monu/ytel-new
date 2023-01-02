@@ -31,6 +31,10 @@ class CallbackPage extends StatefulWidget {
 
 class _CallbackPageState extends State<CallbackPage> {
   AsyncSnapshot<dynamic> snapshots = AsyncSnapshot<dynamic>.nothing();
+  TextEditingController searchController = TextEditingController();
+  bool search_pressed = false;
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +42,8 @@ class _CallbackPageState extends State<CallbackPage> {
       appBar: appbar(),
       body: Column(
         children: [
+          if(search_pressed) _searchNo(),
+
           body(),
         ],
       ),
@@ -52,7 +58,11 @@ class _CallbackPageState extends State<CallbackPage> {
       actions: [
         
         IconButton(
-          onPressed: () {},
+          onPressed: () {
+            setState(() {
+              search_pressed = !search_pressed;
+            });
+          },
           icon: Icon(Icons.search),
         ),
         IconButton(
@@ -249,5 +259,27 @@ class _CallbackPageState extends State<CallbackPage> {
             ),
           );
         });
+  }
+
+  _searchNo() {
+    //return a container to input numbers
+    return Container(
+      padding: EdgeInsets.only(top: 15),
+      height: 50,
+      width: 300,
+      //rounded corners
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        color: Colors.white,
+      ),
+      child: TextField(
+        controller: searchController,
+        decoration: InputDecoration(
+          
+          hintText: 'Search',
+          border: OutlineInputBorder(),
+        ),
+      ),
+    );
   }
 }

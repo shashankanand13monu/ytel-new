@@ -23,6 +23,9 @@ class CnamPage extends StatefulWidget {
 
 class _CnamPageState extends State<CnamPage> {
   AsyncSnapshot<dynamic> snapshots = AsyncSnapshot<dynamic>.nothing();
+    TextEditingController searchController = TextEditingController();
+    bool search_pressed = false;
+
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +33,8 @@ class _CnamPageState extends State<CnamPage> {
       appBar: appbar(),
       body: Column(
         children: [
+          if(search_pressed) _searchNo(),
+
           body(),
         ],
       ),
@@ -44,7 +49,11 @@ class _CnamPageState extends State<CnamPage> {
       actions: [
         
         IconButton(
-          onPressed: () {},
+          onPressed: () {
+            setState(() {
+              search_pressed = !search_pressed;
+            });
+          },
           icon: Icon(Icons.search),
         ),
         IconButton(
@@ -231,4 +240,27 @@ class _CnamPageState extends State<CnamPage> {
           );
         });
   }
+
+  _searchNo() {
+    //return a container to input numbers
+    return Container(
+      padding: EdgeInsets.only(top: 15),
+      height: 50,
+      width: 300,
+      //rounded corners
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        color: Colors.white,
+      ),
+      child: TextField(
+        controller: searchController,
+        decoration: InputDecoration(
+          
+          hintText: 'Search',
+          border: OutlineInputBorder(),
+        ),
+      ),
+    );
+  }
+
 }

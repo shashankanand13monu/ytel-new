@@ -34,4 +34,10 @@ class ApiServices {
     return response;
   }
 
+  Future getSettingAssetData() async {
+    Response response = await dio.getMethod('api/v4/asset/');
+    print(response.data);
+    return response;
+  }
+
 }

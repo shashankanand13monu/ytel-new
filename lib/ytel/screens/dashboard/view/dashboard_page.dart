@@ -22,7 +22,7 @@ import 'package:ytel/ytel/screens/dashboard/view/logout.dart';
 import 'package:ytel/ytel/screens/reporting/usage.dart';
 import 'package:ytel/ytel/screens/settings/accounts/accounts_page.dart';
 import 'package:ytel/ytel/screens/settings/api_token_page.dart';
-import 'package:ytel/ytel/screens/settings/assests.dart';
+import 'package:ytel/ytel/screens/settings/assests/setting_asset_view.dart';
 import 'package:ytel/ytel/screens/settings/audit/audit.dart';
 import 'package:ytel/ytel/screens/settings/billing/billing.dart';
 import 'package:ytel/ytel/screens/settings/callback/callback.dart';
@@ -509,7 +509,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 _commonListTile("Accounts", const AccountsPage()),
                 _commonListTile("Users", const UsersPage()),
                 _commonListTile("Buissness Profiles", const UnderDevelopment()),
-                _commonListTile("Assets", const AssetPage()),
+                _commonListTile("Assets", const SettingAssetView()),
                 _commonListTile("API Tokens", const ApiToken()),
                 _commonListTile("Callbacks", const CallbackPage()),
                 _commonListTile("CNAM Management", const CnamPage()),

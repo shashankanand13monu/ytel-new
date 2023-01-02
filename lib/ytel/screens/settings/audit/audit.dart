@@ -44,10 +44,7 @@ class _AuditPageState extends State<AuditPage> {
       //Search icon in the end of appbar
       actions: [
         
-        IconButton(
-          onPressed: () {},
-          icon: Icon(Icons.search),
-        ),
+        
        
         //Download icon
       ],

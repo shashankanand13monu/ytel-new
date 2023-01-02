@@ -9,6 +9,7 @@ import 'package:ytel/ytel/screens/settings/callback/create_callback.dart';
 import 'package:ytel/ytel/screens/settings/callback/edit_callback.dart';
 import 'package:ytel/ytel/screens/settings/cnam/cnam_controller.dart';
 import 'package:ytel/ytel/screens/settings/compiliance/compiliance_controller.dart';
+import 'package:ytel/ytel/screens/settings/compiliance/create_compiliance.dart';
 import 'package:ytel/ytel/utils/storage_utils.dart';
 
 import '../../../helper/constants/colors.dart';
@@ -29,6 +30,7 @@ class _CompiliancePageState extends State<CompiliancePage> {
   TextEditingController _url = TextEditingController();
   TextEditingController _method = TextEditingController();
   TextEditingController _phone = TextEditingController();
+  
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +52,7 @@ class _CompiliancePageState extends State<CompiliancePage> {
   appbar() {
     return AppBar(
       backgroundColor: ColorHelper.primaryTextColor,
-      title: Text('CNAM Management', style: TextStyle(color: Colors.white)),
+      title: Text('Compiliance', style: TextStyle(color: Colors.white)),
       //Search icon in the end of appbar
       bottom: TabBar(
         tabs: [
@@ -66,12 +68,12 @@ class _CompiliancePageState extends State<CompiliancePage> {
         ],
       ),
       actions: [
+        
         IconButton(
-          onPressed: () {},
-          icon: Icon(Icons.search),
-        ),
-        IconButton(
-          onPressed: () {},
+          onPressed: () {
+            Get.to(() => CreateComp());
+          
+          },
           icon: Icon(Icons.add),
         ),
         //Download icon
