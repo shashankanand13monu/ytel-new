@@ -34,8 +34,25 @@ class ApiServices {
     return response;
   }
 
+//get Asset
   Future getSettingAssetData() async {
     Response response = await dio.getMethod('api/v4/asset/');
+    print(response.data);
+    return response;
+  }
+
+  //
+
+  Future editSettingAsset(Map<String, dynamic> body) async {
+    Response response = await dio.postMethod("", body);
+    return response;
+  }
+
+  Future logSearch() async {
+    //https://api.ytel.com/api/v4/logs/sms/?limit=10000&startDate=2022-12-20&endDate=2023-01-02
+    Response response = await dio.getMethod(
+        'api/v4/logs/sms/?limit=10000&startDate=2022-12-20&endDate=2023-01-02');
+    print(response.data);
     return response;
   }
 }

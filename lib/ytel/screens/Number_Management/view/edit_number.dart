@@ -58,6 +58,7 @@ class _EditPhoneNumberState extends State<EditPhoneNumber> {
   @override
   Widget build(BuildContext context) {
     //Display 3 screen defaultTabController
+    Color color = ColorHelper.colors[9];
     return DefaultTabController(
       length: 3,
       child: Scaffold(
@@ -75,527 +76,551 @@ class _EditPhoneNumberState extends State<EditPhoneNumber> {
         ),
         body: _isLoading == true
             ? Center(
-                child: CircularProgressIndicator(),
+                child: CircularProgressIndicator(
+                  color: ColorHelper.colors[6],
+                  strokeWidth: 1,
+                ),
               )
             : TabBarView(
                 children: [
-                  Center(
-                      child: Padding(
-                    padding: const EdgeInsets.all(25.0),
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          //Text Form Field for "Friendly Name"
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Container(
-                                width: 90,
-                                height: 38,
-                                child: FloatingActionButton(
-                                  heroTag: "btn1",
-                                  onPressed: () {
-                                    //Go back using getx
-                                    Get.back();
-                                  },
-                                  child: Text(
-                                    'Cancel',
-                                    style: TextStyle(
-                                        fontSize: 23,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white),
-                                  ),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                                  backgroundColor: Colors.blue,
-                                ),
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              //Cancel button
-                              Container(
-                                width: 90,
-                                height: 38,
-                                child: FloatingActionButton(
-                                  heroTag: "btn2",
-                                  onPressed: () {
-                                    //Put API to edit fields
-                                    putApi(
-                                        voice_fallback_URL.text,
-                                        voice_request_URL.text,
-                                        hangup_callback_URL.text,
-                                        heartbeat_URL.text,
-                                        friendly_name.text);
-                                  },
-                                  child: Text(
-                                    'Save',
-                                    style: TextStyle(
-                                        fontSize: 23,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white),
-                                  ),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                                  backgroundColor: Colors.blue,
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text("Friendly Name",
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
-                                  )),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-
-                          TextFormField(
-                            controller: friendly_name,
-                            decoration: InputDecoration(
-                              hintText: apiList['payload'][0]['friendlyName'],
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text("Voice request URL",
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
-                                  )),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-
-                          //Display a form with 4 textfield named "Voice request URL","Voice Fallback URL","Hangup callback URL","heartbeat URL" with a side drop down button which has "POST" and "GET" as options and default value as "POST" with DropdownButtonHideUnderline
-
-                          TextFormField(
-                            controller: voice_request_URL,
-                            decoration: InputDecoration(
-                              hintText: apiList['payload'][0]['voiceUrl'],
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                              suffixIcon: DropdownButtonHideUnderline(
-                                child: DropdownButton(
-                                  value: m1,
-                                  items: method1.map((String value) {
-                                    return DropdownMenuItem(
-                                      value: method1.indexOf(value),
-                                      child: Text(value),
-                                    );
-                                  }).toList(),
-                                  onChanged: (value) {
-                                    setState(() {
-                                      m1 = value as int;
-                                    });
-                                  },
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 15,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text("Voice Fallback URL",
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
-                                  )),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-
-                          TextFormField(
-                            controller: voice_fallback_URL,
-                            decoration: InputDecoration(
-                              hintText: apiList['payload'][0]
-                                  ['voiceFallbackUrl'],
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                              suffixIcon: DropdownButtonHideUnderline(
-                                child: DropdownButton(
-                                  value: m2,
-                                  items: method2.map((String value) {
-                                    return DropdownMenuItem(
-                                      value: method2.indexOf(value),
-                                      child: Text(value),
-                                    );
-                                  }).toList(),
-                                  onChanged: (value) {
-                                    setState(() {
-                                      m2 = value as int;
-                                    });
-                                  },
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 15,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text("Hangup callback URL",
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
-                                  )),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-
-                          TextFormField(
-                            controller: hangup_callback_URL,
-                            decoration: InputDecoration(
-                              hintText: apiList['payload'][0]
-                                  ['hangupCallbackUrl'],
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                              suffixIcon: DropdownButtonHideUnderline(
-                                child: DropdownButton(
-                                  value: m3,
-                                  items: method3.map((String value) {
-                                    return DropdownMenuItem(
-                                      value: method3.indexOf(value),
-                                      child: Text(value),
-                                    );
-                                  }).toList(),
-                                  onChanged: (value) {
-                                    setState(() {
-                                      m3 = value as int;
-                                    });
-                                  },
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 15,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text("Hangup callback URL",
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
-                                  )),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          TextFormField(
-                            controller: heartbeat_URL,
-                            decoration: InputDecoration(
-                              labelText: apiList['payload'][0]['heartbeatUrl'],
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                              suffixIcon: DropdownButtonHideUnderline(
-                                child: DropdownButton(
-                                  value: m4,
-                                  items: method4.map((String value) {
-                                    return DropdownMenuItem(
-                                      value: method4.indexOf(value),
-                                      child: Text(value),
-                                    );
-                                  }).toList(),
-                                  onChanged: (value) {
-                                    setState(() {
-                                      m4 = value as int;
-                                    });
-                                  },
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          //Display a button named "Save"
-                        ],
-                      ),
-                    ),
-                  )),
-
+                  _inboundVoice(),
                   //--------------------------------------------------------------------
-                  Center(
-                      child: Padding(
-                    padding: const EdgeInsets.all(25.0),
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Container(
-                              width: 90,
-                              height: 38,
-                              child: FloatingActionButton(
-                                heroTag: "btn3",
-                                onPressed: () {
-                                  //Go back using getx
-                                  Get.back();
-                                  // Navigator.pop(context);
-                                },
-                                child: Text(
-                                  'Cancel',
-                                  style: TextStyle(
-                                      fontSize: 23,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white),
-                                ),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5),
-                                ),
-                                backgroundColor: Colors.blue,
-                              ),
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-
-                            //Cancel button
-                            Container(
-                              width: 90,
-                              height: 38,
-                              child: FloatingActionButton(
-                                heroTag: "btn4",
-                                onPressed: () {
-                                  putSMSApi(sms_fallback_URL.text,
-                                      sms_request_URL.text);
-                                },
-                                child: Text(
-                                  'Save',
-                                  style: TextStyle(
-                                      fontSize: 23,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white),
-                                ),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5),
-                                ),
-                                backgroundColor: Colors.blue,
-                              ),
-                            ),
-                          ],
-                        ),
-                        //Same thing as above with 2 fields  "SMS request URL" and "SMS fallback URL"
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Text("SMS request URL",
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
-                                )),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        TextFormField(
-                          controller: sms_request_URL,
-                          decoration: InputDecoration(
-                            hintText: apiList['payload'][0]['smsUrl'],
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                            suffixIcon: DropdownButtonHideUnderline(
-                              child: DropdownButton(
-                                value: s1,
-                                items: sms1.map((String value) {
-                                  return DropdownMenuItem(
-                                    value: sms1.indexOf(value),
-                                    child: Text(value),
-                                  );
-                                }).toList(),
-                                onChanged: (value) {
-                                  setState(() {
-                                    s1 = value as int;
-                                  });
-                                },
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Text("SMS fallback URL",
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
-                                )),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        TextFormField(
-                          controller: sms_fallback_URL,
-                          decoration: InputDecoration(
-                            hintText: apiList['payload'][0]['smsFallbackUrl'],
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                            suffixIcon: DropdownButtonHideUnderline(
-                              child: DropdownButton(
-                                value: s2,
-                                items: sms2.map((String value) {
-                                  return DropdownMenuItem(
-                                    value: sms2.indexOf(value),
-                                    child: Text(value),
-                                  );
-                                }).toList(),
-                                onChanged: (value) {
-                                  setState(() {
-                                    s2 = value as int;
-                                  });
-                                },
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                      ],
-                    ),
-                  )),
+                  _inboundSms(),
                   //--------------------------------------------------------------------
-                  Center(
-                      child: Column(
-                    children: [
-                      //Dropdown button for Yes or No qith title "Enable Call Recording"
-                      Padding(
-                        padding: const EdgeInsets.all(25.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Enable Call Recording",
-                              style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            DropdownButtonHideUnderline(
-                              child: DropdownButton(
-                                value: rec,
-                                items: record_method.map((String value) {
-                                  return DropdownMenuItem(
-                                    value: record_method.indexOf(value),
-                                    child: Text(value),
-                                  );
-                                }).toList(),
-                                onChanged: (value) {
-                                  setState(() {
-                                    rec = value as int;
-                                  });
-                                },
-                              ),
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                Container(
-                                  width: 90,
-                                  height: 38,
-                                  child: FloatingActionButton(
-                                    heroTag: "btn5",
-                                    onPressed: () {
-                                      //Go back using getx
-                                      Get.back();
-                                      // Navigator.pop(context);
-                                    },
-                                    child: Text(
-                                      'Cancel',
-                                      style: TextStyle(
-                                          fontSize: 23,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white),
-                                    ),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(5),
-                                    ),
-                                    backgroundColor: Colors.blue,
-                                  ),
-                                ),
-                                //Cancel button
-                                Container(
-                                  width: 90,
-                                  height: 38,
-                                  child: FloatingActionButton(
-                                    heroTag: "btn6",
-                                    onPressed: () {
-                                      //Print All
-                                      print(voice_request_URL.text);
-                                      print(voice_fallback_URL.text);
-                                      print(hangup_callback_URL.text);
-                                      print(heartbeat_URL.text);
-                                    },
-                                    child: Text(
-                                      'Save',
-                                      style: TextStyle(
-                                          fontSize: 23,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white),
-                                    ),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(5),
-                                    ),
-                                    backgroundColor: Colors.blue,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  )),
+                  _inboundWebphone()
                 ],
               ),
       ),
+    );
+  }
+
+  Widget _inboundVoice() {
+    return Center(
+        child: Padding(
+      padding: const EdgeInsets.all(25.0),
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            //Text Form Field for "Friendly Name"
+            _inboxSave(),
+            SizedBox(
+              height: 20,
+            ),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text("Friendly Name",
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                    )),
+              ],
+            ),
+            SizedBox(
+              height: 10,
+            ),
+
+            TextFormField(
+              controller: friendly_name,
+              decoration: InputDecoration(
+                hintText: apiList['payload'][0]['friendlyName'],
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(24.0),
+                ),
+                //border color
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text("Voice request URL",
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                    )),
+              ],
+            ),
+            SizedBox(
+              height: 10,
+            ),
+
+            //Display a form with 4 textfield named "Voice request URL","Voice Fallback URL","Hangup callback URL","heartbeat URL" with a side drop down button which has "POST" and "GET" as options and default value as "POST" with DropdownButtonHideUnderline
+
+            TextFormField(
+              controller: voice_request_URL,
+              decoration: InputDecoration(
+                hintText: apiList['payload'][0]['voiceUrl'],
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(24),
+                ),
+                suffixIcon: DropdownButtonHideUnderline(
+                  child: DropdownButton(
+                    value: m1,
+                    items: method1.map((String value) {
+                      return DropdownMenuItem(
+                        value: method1.indexOf(value),
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        m1 = value as int;
+                      });
+                    },
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text("Voice Fallback URL",
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                    )),
+              ],
+            ),
+            SizedBox(
+              height: 10,
+            ),
+
+            TextFormField(
+              controller: voice_fallback_URL,
+              decoration: InputDecoration(
+                hintText: apiList['payload'][0]['voiceFallbackUrl'],
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(24),
+                ),
+                suffixIcon: DropdownButtonHideUnderline(
+                  child: DropdownButton(
+                    value: m2,
+                    items: method2.map((String value) {
+                      return DropdownMenuItem(
+                        value: method2.indexOf(value),
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        m2 = value as int;
+                      });
+                    },
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text("Hangup callback URL",
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                    )),
+              ],
+            ),
+            SizedBox(
+              height: 10,
+            ),
+
+            TextFormField(
+              controller: hangup_callback_URL,
+              decoration: InputDecoration(
+                hintText: apiList['payload'][0]['hangupCallbackUrl'],
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(24),
+                ),
+                suffixIcon: DropdownButtonHideUnderline(
+                  child: DropdownButton(
+                    value: m3,
+                    items: method3.map((String value) {
+                      return DropdownMenuItem(
+                        value: method3.indexOf(value),
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        m3 = value as int;
+                      });
+                    },
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text("Hangup callback URL",
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                    )),
+              ],
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            TextFormField(
+              controller: heartbeat_URL,
+              decoration: InputDecoration(
+                labelText: apiList['payload'][0]['heartbeatUrl'],
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(24),
+                ),
+                suffixIcon: DropdownButtonHideUnderline(
+                  child: DropdownButton(
+                    value: m4,
+                    items: method4.map((String value) {
+                      return DropdownMenuItem(
+                        value: method4.indexOf(value),
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        m4 = value as int;
+                      });
+                    },
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            //Display a button named "Save"
+          ],
+        ),
+      ),
+    ));
+  }
+
+  Widget _inboundSms() {
+    return Center(
+        child: Padding(
+      padding: const EdgeInsets.all(25.0),
+      child: Column(
+        children: [
+          _smsSave(),
+          //Same thing as above with 2 fields  "SMS request URL" and "SMS fallback URL"
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Text("SMS request URL",
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                  )),
+            ],
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          TextFormField(
+            controller: sms_request_URL,
+            decoration: InputDecoration(
+              hintText: apiList['payload'][0]['smsUrl'],
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(24),
+              ),
+              suffixIcon: DropdownButtonHideUnderline(
+                child: DropdownButton(
+                  value: s1,
+                  items: sms1.map((String value) {
+                    return DropdownMenuItem(
+                      value: sms1.indexOf(value),
+                      child: Text(value),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      s1 = value as int;
+                    });
+                  },
+                ),
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 15,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Text("SMS fallback URL",
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                  )),
+            ],
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          TextFormField(
+            controller: sms_fallback_URL,
+            decoration: InputDecoration(
+              hintText: apiList['payload'][0]['smsFallbackUrl'],
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(24),
+              ),
+              suffixIcon: DropdownButtonHideUnderline(
+                child: DropdownButton(
+                  value: s2,
+                  items: sms2.map((String value) {
+                    return DropdownMenuItem(
+                      value: sms2.indexOf(value),
+                      child: Text(value),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      s2 = value as int;
+                    });
+                  },
+                ),
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+        ],
+      ),
+    ));
+  }
+
+  Widget _inboundWebphone() {
+    return Center(
+        child: Column(
+      children: [
+        //Dropdown button for Yes or No qith title "Enable Call Recording"
+        Padding(
+          padding: const EdgeInsets.all(25.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Enable Call Recording",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              DropdownButtonHideUnderline(
+                child: DropdownButton(
+                  value: rec,
+                  items: record_method.map((String value) {
+                    return DropdownMenuItem(
+                      value: record_method.indexOf(value),
+                      child: Text(value),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      rec = value as int;
+                    });
+                  },
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              _webphoneSave(),
+            ],
+          ),
+        ),
+      ],
+    ));
+  }
+
+  Widget _inboxSave() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Container(
+          width: 90,
+          height: 50,
+          child: FloatingActionButton(
+            heroTag: "btn1",
+            onPressed: () {
+              //Go back using getx
+              Get.back();
+            },
+            child: Text(
+              'Cancel',
+              style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white),
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            backgroundColor: Colors.grey,
+          ),
+        ),
+        SizedBox(
+          width: 10,
+        ),
+        //Cancel button
+        Container(
+          width: 90,
+          height: 50,
+          child: FloatingActionButton(
+            heroTag: "btn2",
+            onPressed: () {
+              //Put API to edit fields
+              putApi(
+                  voice_fallback_URL.text,
+                  voice_request_URL.text,
+                  hangup_callback_URL.text,
+                  heartbeat_URL.text,
+                  friendly_name.text);
+            },
+            child: Text(
+              'Save',
+              style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white),
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            backgroundColor: Colors.blue,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _smsSave() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Container(
+          width: 90,
+          height: 50,
+          child: FloatingActionButton(
+            heroTag: "btn3",
+            onPressed: () {
+              //Go back using getx
+              Get.back();
+              // Navigator.pop(context);
+            },
+            child: Text(
+              'Cancel',
+              style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white),
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            backgroundColor: Colors.grey,
+          ),
+        ),
+        SizedBox(
+          width: 10,
+        ),
+
+        //Cancel button
+        Container(
+          width: 90,
+          height: 50,
+          child: FloatingActionButton(
+            heroTag: "btn4",
+            onPressed: () {
+              putSMSApi(sms_fallback_URL.text, sms_request_URL.text);
+            },
+            child: Text(
+              'Save',
+              style: TextStyle(
+                  fontSize: 23,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white),
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            backgroundColor: Colors.blue,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _webphoneSave() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        Container(
+          width: 90,
+          height: 50,
+          child: FloatingActionButton(
+            heroTag: "btn5",
+            onPressed: () {
+              //Go back using getx
+              Get.back();
+              // Navigator.pop(context);
+            },
+            child: Text(
+              'Cancel',
+              style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white),
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            backgroundColor: Colors.grey,
+          ),
+        ),
+        //Cancel button
+        Container(
+          width: 90,
+          height: 50,
+          child: FloatingActionButton(
+            heroTag: "btn6",
+            onPressed: () {
+              //Print All
+              print(voice_request_URL.text);
+              print(voice_fallback_URL.text);
+              print(hangup_callback_URL.text);
+              print(heartbeat_URL.text);
+            },
+            child: Text(
+              'Save',
+              style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white),
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            backgroundColor: Colors.blue,
+          ),
+        ),
+      ],
     );
   }
 

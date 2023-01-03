@@ -6,6 +6,7 @@ import 'package:ytel/ytel/helper/constants/colors.dart';
 import 'package:ytel/ytel/helper/constants/icons.dart';
 import 'package:ytel/ytel/model/setting_assets_model.dart';
 
+import '../../../utils/extension.dart';
 import '../controller/setting_assets_controller.dart';
 
 class SettingAssetView extends StatefulWidget {
@@ -21,8 +22,25 @@ class _SettingAssetViewState extends State<SettingAssetView> {
   @override
   final Setting_Assets_Controller setting_assets_controller =
       Get.put(Setting_Assets_Controller());
+
   Payload? payload;
   bool loading = false;
+
+  getSettingAssetData() async {
+    bool isInternetOn = await check();
+    if (isInternetOn) {
+      await setting_assets_controller.getSettingData();
+    }
+
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getSettingAssetData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,16 +77,16 @@ class _SettingAssetViewState extends State<SettingAssetView> {
         ),
         body: TabBarView(
           children: [
-            body(),
-            body(),
-            body(),
+            body('audio'),
+            body('mms-image'),
+            body('inboundxml'),
           ],
         ),
       ),
     );
   }
 
-  Widget body() {
+  Widget body(String type) {
     return Column(
       children: [
         Expanded(
@@ -76,12 +94,16 @@ class _SettingAssetViewState extends State<SettingAssetView> {
               scrollDirection: Axis.vertical,
               physics: BouncingScrollPhysics(),
               shrinkWrap: true,
-              itemCount:
-                  setting_assets_controller.settingAssetsModel?.payload?.length,
-              itemBuilder: (context, int index) {
-                print(
-                    "omni+${setting_assets_controller.settingAssetsModel?.payload?.length}");
-
+              itemCount: setting_assets_controller.settingAssetsModel?.payload
+                      ?.where((element) => element.type == type)
+                      .toList()
+                      .length ??
+                  0,
+              itemBuilder: (context, index) {
+                final settingAssetModel = setting_assets_controller
+                    .settingAssetsModel?.payload
+                    ?.where((element) => element.type == type)
+                    .toList()[index];
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
@@ -103,8 +125,10 @@ class _SettingAssetViewState extends State<SettingAssetView> {
                         SizedBox(
                           width: 15,
                         ),
-                        Text(
-                            "${setting_assets_controller.settingAssetsModel?.payload![index].name?.toString()}"),
+                        Expanded(
+                          flex: 4,
+                          child: Text("${settingAssetModel?.name!.toString()}"),
+                        ),
 
                         // AutoSizeText(
                         //   snapshot.data['payload'][index]['name'] == null
@@ -131,9 +155,12 @@ class _SettingAssetViewState extends State<SettingAssetView> {
                         SizedBox(
                           width: 5,
                         ),
-                        Icon(
-                          IconHelper.icons[12],
-                          color: ColorHelper.colors[2],
+                        InkWell(
+                          //  onTap: setting_assets_controller.,
+                          child: Icon(
+                            IconHelper.icons[12],
+                            color: ColorHelper.colors[2],
+                          ),
                         )
                       ],
                     ),

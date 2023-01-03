@@ -56,78 +56,11 @@ class _NumberScreenState extends State<NumberScreen> {
 
       if (result.statusCode == 200) {
         print("OK");
-        /* 
-      Example Response
-{
-  "status": true,
-  "count": 576,
-  "page": 1,
-  "payload": [
-    {
-      "accountSid": "173c6f7f-c911-f823-fb2d-a13e4780c300",
-      "phoneSid": "25431e50-6866-11ea-9ea9-d1464f98b813",
-      "phoneNumber": "+15552283797",
-      "voiceUrl": "https://testdomain.com",
-      "voiceMethod": "GET",
-      "voiceFallbackUrl": "",
-      "voiceFallbackMethod": "POST",
-      "renewalDate": 1611101028432,
-      "purchaseDate": 1584459850921,
-      "region": "US-NJ",
-      "timezone": -20,
-      "smsUrl": "",
-      "smsMethod": "POST",
-      "smsFallbackUrl": "",
-      "smsFallbackMethod": "POST",
-      "heartbeatUrl": "",
-      "heartbeatMethod": "POST",
-      "hangupCallbackUrl": "",
-      "hangupCallbackMethod": "POST",
-      "attributes": [
-        "voice-enabled"
-      ],
-      "numberType": 1
-    },
-    {
-      "accountSid": "173c6f7f-c911-f823-fb2d-a13e4780c300",
-      "phoneSid": "8567a510-6886-11ea-9b6f-e6478104197e",
-      "phoneNumber": "+15552283811",
-      "voiceUrl": "https://testdomain.com",
-      "voiceMethod": "GET",
-      "voiceFallbackUrl": "",
-      "voiceFallbackMethod": "POST",
-      "renewalDate": 1611360251655,
-      "purchaseDate": 1584473756124,
-      "region": "US-NJ",
-      "timezone": -20,
-      "smsUrl": "",
-      "smsMethod": "POST",
-      "smsFallbackUrl": "",
-      "smsFallbackMethod": "POST",
-      "heartbeatUrl": "",
-      "heartbeatMethod": "POST",
-      "hangupCallbackUrl": "",
-      "hangupCallbackMethod": "POST",
-      "attributes": [
-        "voice-enabled"
-      ],
-      "numberType": 1
-    }
-  ]
-}
-      */
+      
         var data = json.decode(result.body);
 
-        // print(data);
-
         if (data['status'] == false) {
-          // print(data);
-
-          /*{status: false, count: 0, page: 0, error: [{code: 401, message: Permission denied, moreInfo: null}]} */
-
-          //Display Dialog Box of error message with "Logout" button
-
-          //go to catch throw error
+         
           throw Exception(data['error'][0]['message']);
         }
 
@@ -141,7 +74,7 @@ class _NumberScreenState extends State<NumberScreen> {
         });
       }
     } catch (e) {
-      //Display Dialog Box of error message with "Logout" button
+      
       logger.e(e);
     }
   }
