@@ -16,6 +16,7 @@ import 'package:ytel/ytel/screens/Under_Development/under_devlopment.dart';
 import 'package:ytel/ytel/screens/accounts/account_screen.dart';
 import 'package:ytel/ytel/screens/chat/page/chats_page.dart';
 import 'package:ytel/ytel/screens/chat/users.dart';
+import 'package:ytel/ytel/screens/contact/view/attributes.dart';
 import 'package:ytel/ytel/screens/contact/view/contact_view.dart';
 import 'package:ytel/ytel/screens/dashboard/view/homescreen.dart';
 import 'package:ytel/ytel/screens/dashboard/view/logout.dart';
@@ -28,12 +29,11 @@ import 'package:ytel/ytel/screens/settings/billing/billing.dart';
 import 'package:ytel/ytel/screens/settings/callback/callback.dart';
 import 'package:ytel/ytel/screens/settings/cnam/cnam.dart';
 import 'package:ytel/ytel/screens/settings/compiliance/compiliance.dart';
-import 'package:ytel/ytel/screens/settings/newUsers/users.dart';
 import 'package:ytel/ytel/screens/settings/view/user_view.dart';
 
-import '../../../helper/widget/rectangle_contaner.dart';
-import '../../../helper/widget/square_container.dart';
 import '../../../utils/storage_utils.dart';
+import '../../contact/view/contact.dart';
+import '../../contact/view/contact_import_status.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({Key? key}) : super(key: key);
@@ -481,8 +481,8 @@ class _DashboardPageState extends State<DashboardPage> {
               _commonMethod("assets/images/contact.png", "Contacts", [
                 _commonListTile("Contacts", const ContactPage()),
                 _commonListTile(
-                    "Contact Import Status", const UnderDevelopment()),
-                _commonListTile("Attributes", const UnderDevelopment()),
+                    "Contact Import Status", const ContactImportStatus()),
+                _commonListTile("Attributes", const AttributesPage()),
               ]),
               _commonMethod("assets/images/project-plan.png", "Workflow", [
                 _commonListTile("Workflows", const UnderDevelopment()),

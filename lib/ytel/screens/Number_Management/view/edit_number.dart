@@ -37,6 +37,13 @@ class _EditPhoneNumberState extends State<EditPhoneNumber> {
   int s2 = 0;
   int rec = 0;
 
+  @override
+  void initState() {
+    super.initState();
+    getNumbersFromAPI();
+  }
+
+  var apiList;
   final TextEditingController voice_request_URL = TextEditingController();
   final TextEditingController voice_fallback_URL = TextEditingController();
   final TextEditingController hangup_callback_URL = TextEditingController();
@@ -44,20 +51,27 @@ class _EditPhoneNumberState extends State<EditPhoneNumber> {
   final TextEditingController sms_request_URL = TextEditingController();
   final TextEditingController sms_fallback_URL = TextEditingController();
   final TextEditingController friendly_name = TextEditingController();
-  var apiList;
-  bool _isLoading = false;
 
-  @override
-  void initState() {
-    super.initState();
-    getNumbersFromAPI();
-  }
+  bool _isLoading = false;
 
   String accessToken = StorageUtil.getString(StringHelper.ACCESS_TOKEN);
 
   _EditPhoneNumberState(this.phoneId);
   @override
   Widget build(BuildContext context) {
+    if(apiList!=null)
+    {
+      friendly_name.text = apiList['payload'][0]['friendlyName']==null?"":apiList['payload'][0]['friendlyName'];
+    voice_request_URL.text = apiList['payload'][0]['voiceUrl']==null?"":apiList['payload'][0]['voiceUrl'];
+    voice_fallback_URL.text = apiList['payload'][0]['voiceFallbackUrl']==null?"":apiList['payload'][0]['voiceFallbackUrl'];
+    hangup_callback_URL.text = apiList['payload'][0]['hangupCallbackUrl']==null?"":apiList['payload'][0]['hangupCallbackUrl'];
+    heartbeat_URL.text = apiList['payload'][0]['heartbeatUrl']==null?"":apiList['payload'][0]['heartbeatUrl'];
+    sms_request_URL.text = apiList['payload'][0]['smsRequestUrl']==null?"":apiList['payload'][0]['smsRequestUrl'];
+    sms_fallback_URL.text = apiList['payload'][0]['smsFallbackUrl']==null?"":apiList['payload'][0]['smsFallbackUrl'];
+    
+    }
+    
+
     //Display 3 screen defaultTabController
     Color color = ColorHelper.colors[9];
     return DefaultTabController(
@@ -668,9 +682,8 @@ class _EditPhoneNumberState extends State<EditPhoneNumber> {
           throw Exception(data['error'][0]['message']);
         }
         //Show success message
-        
-        CommonSnackBar.showSnackbar("Sucess", "Number updated successfully");
 
+        CommonSnackBar.showSnackbar("Sucess", "Number updated successfully");
       }
     } catch (e) {
       logger.e(e);
@@ -710,7 +723,6 @@ class _EditPhoneNumberState extends State<EditPhoneNumber> {
           throw Exception(data['error'][0]['message']);
         }
         //Show success message
-        
 
         CommonSnackBar.showSnackbar("Sucess", "SMS updated successfully");
       }
