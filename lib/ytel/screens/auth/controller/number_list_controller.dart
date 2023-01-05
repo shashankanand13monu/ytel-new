@@ -8,7 +8,8 @@ import '../../../helper/constants/strings.dart';
 import '../../../utils/storage_utils.dart';
 
 class number_list_controller extends GetxController {
-  static numberData() async {
+  var numberList = <dynamic>[].obs;
+  numberData() async {
     String url = '${StringHelper.BASE_URL}api/v4/number/?offset=0';
     String accessToken = StorageUtil.getString(StringHelper.ACCESS_TOKEN);
 
@@ -28,13 +29,33 @@ class number_list_controller extends GetxController {
       if (result.statusCode == 200) {
         print("OK");
         var data = json.decode(result.body);
-        print(data);
+        numberList.addAll(data['payload']);
+        print("Number Length: " + numberList.length.toString());
+        print(data['payload']);
+
         return data;
       } else {
         print("Something went Wrong");
       }
     } catch (e) {
       print(e);
+    }
+  }
+
+  var filteredDataList = <dynamic>[].obs;
+  filterNo({required String st}) {
+    print("Searching for: $st ===========================");
+
+    var contain =
+        numberList.where((p0) => p0['phoneNumber'].toString() == st.toString());
+    print(numberList);
+    print("Contain: $contain" + "---------------------------------");
+
+    if (contain.isNotEmpty) {
+      filteredDataList.clear();
+      filteredDataList.addAll(contain);
+    } else {
+      filteredDataList.clear();
     }
   }
 
@@ -79,9 +100,7 @@ class number_list_controller extends GetxController {
     }
     if (areaCode == 'Voice only') {
       type_code = 'voice';
-    }
-    else
-    {
+    } else {
       type_code = 'sms';
     }
     String url =

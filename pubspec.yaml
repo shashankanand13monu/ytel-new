@@ -23,7 +23,6 @@ dependencies:
     sdk: flutter
   flutter_credit_card: ^3.0.4
   flutter_easyloading: ^3.0.5
-  flutter_uploader: ^1.2.1
   font_awesome_flutter: ^10.2.1
   get: ^4.6.5
   google_fonts: ^3.0.1
@@ -38,6 +37,7 @@ dependencies:
   syncfusion_flutter_charts: ^20.3.52
   toggle_switch: ^2.0.1
   url_launcher: ^6.1.7
+  webview_flutter: ^4.0.1
 
 dev_dependencies:
   flutter_lints: ^2.0.0

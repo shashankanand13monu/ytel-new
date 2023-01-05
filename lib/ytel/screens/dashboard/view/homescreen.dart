@@ -5,6 +5,7 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:ytel/ytel/screens/chat/page/chats_page.dart';
 import 'package:ytel/ytel/screens/dashboard/view/dashboard_page.dart';
+import 'package:ytel/ytel/screens/dashboard/view/webview.dart';
 
 
 
@@ -50,7 +51,7 @@ _controller = PersistentTabController(initialIndex: 0);
         return [
           DashboardPage(),
           ChatsPage(),
-          DashboardPage(),
+          WebView(),
 
         ];
     }
